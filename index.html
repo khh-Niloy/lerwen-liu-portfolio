@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Portfolio of Dr. Lerwen Liu, Associate Professor (Practice) at NTU specializing in Circular Economy, Sustainability-Driven Entrepreneurship, and Emerging Technologies." />
+  <meta name="keywords" content="Lerwen Liu, Circular Economy, Sustainability, Entrepreneurship, NTU, Academic Portfolio" />
+  <meta name="author" content="Dr. Lerwen Liu" />
+  <title>Dr. Lerwen Liu - Sustainability Leader & Associate Professor</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* Underline animation on nav links */
+    .underline-anim::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #16a34a; /* Tailwind green-600 */
+      transition: width 0.3s ease;
+    }
+    .underline-anim:hover::after,
+    .underline-anim:focus::after {
+      width: 100%;
+    }
+    /* Keyframes for animations */
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(25px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeSlideUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    @keyframes fadeScaleUp {
+      0% { opacity: 0; transform: translateY(30px) scale(0.9); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Register animation utilities inside Tailwind */
+    @layer utilities {
+      .animate-fade-in {
+        animation: fadeInUp 0.8s forwards;
+        opacity: 0;
+      }
+      .delay-100 { animation-delay: 0.4s; }
+      .delay-300 { animation-delay: 0.3s; }
+      .delay-500 { animation-delay: 0.5s; }
+      .delay-700 { animation-delay: 1.2s; }
+
+      .animate-fade-slide-up {
+        animation: fadeSlideUp 5s ease forwards;
+      }
+      .animate-float {
+        animation: float 4s ease-in-out infinite;
+      }
+      .animate-fade-scale-up {
+        animation: fadeScaleUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        opacity: 0;
+      }
+
+      /* Nav underline animation */
+      nav ul li a {
+        position: relative;
+        padding-bottom: 0.25rem; /* 4px */
+      }
+      nav ul li a::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background-color: #166534; /* Tailwind's green-900 */
+        transition: width 0.3s ease-in-out;
+      }
+      nav ul li a:hover::after,
+      nav ul li a:focus::after {
+        width: 100%;
+      }
+    }
+
+    /* Scrollbar styles (optional) */
+    html {
+      scrollbar-width: thin;
+      scrollbar-color: #4ade80 transparent; /* green-400 */
+    }
+    html::-webkit-scrollbar {
+      width: 8px;
+    }
+    html::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    html::-webkit-scrollbar-thumb {
+      background-color: #4ade80; /* green-400 */
+      border-radius: 9999px; /* rounded-full */
+      border: 2px solid transparent;
+      background-clip: content-box;
+    }
+  </style>
+</head>
+<body class="bg-neutral-50 text-gray-800 font-sans leading-relaxed selection:bg-green-300 selection:text-green-900">
+
+  <!-- Fixed Header & Navigation -->
+  <header id="header" class="fixed top-0 left-0 w-full z-50 transition-colors duration-500 ease-in-out bg-transparent">
+    <nav class="max-w-7xl mx-auto flex items-center justify-between px-6 py-4 md:py-5 lg:py-4">
+      <a href="#home" class="text-green-700 font-bold text-xl md:text-2xl hover:text-green-900 focus:outline-none focus:ring-2 focus:ring-green-500" aria-label="Home - Dr. Lerwen Liu Portfolio">
+        Lerwen Liu
+      </a>
+      <ul class="hidden md:flex space-x-8 text-gray-700 font-medium">
+        <li><a href="#home" class="hover:text-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition">Home</a></li>
+        <li><a href="#about" class="hover:text-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition">About</a></li>
+        <li><a href="#expertise" class="hover:text-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition">Expertise</a></li>
+        <li><a href="#projects" class="hover:text-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition">Projects</a></li>
+        <li><a href="#blog" class="hover:text-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition">Blog and Newsletter</a></li>
+        <li><a href="#publications" class="hover:text-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition">Publications</a></li>
+        <li><a href="#contact" class="hover:text-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition">Contact</a></li>
+      </ul>
+      <!-- Mobile menu button -->
+      <button id="mobile-menu-button" aria-label="Toggle menu" aria-expanded="false" class="md:hidden focus:outline-none focus:ring-2 focus:ring-green-500 text-green-700">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" >
+          <path d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </nav>
+  </header>
+
+  <!-- Main content wrapper with top padding to avoid overlap with fixed header -->
+  <main class=" mx-auto">
+
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-green-50 via-green-100 to-green-200">
+      
+      <!-- Hero content -->
+      <div class="relative max-w-7xl mx-auto px-6 py-20 md:py-32">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          <!-- Text content -->
+          <div class="lg:col-span-7 space-y-8">
+            <div class="space-y-6">
+              <div class="inline-flex items-center space-x-2 bg-green-600 bg-opacity-10 rounded-full px-4 py-2 animate-slide-in-left">
+                <span class="w-2 h-2 bg-green-600 rounded-full animate-pulse"></span>
+                <span class="text-sm font-medium text-green-700">Leading Sustainability Innovation</span>
+              </div>
+              
+              <h1 class="text-5xl md:text-7xl font-bold text-gray-900 leading-tight">
+                <span class="inline-block animate-text-reveal delay-100">Dr.</span> 
+                <span class="inline-block animate-text-reveal delay-200 text-[#16A349]">Lerwen</span> 
+                <span class="inline-block animate-text-reveal delay-300">Liu</span>
+              </h1>
+              
+              <h2 class="text-2xl md:text-3xl text-green-600 leading-relaxed animate-slide-up delay-400">
+                <span class="block mb-2 animate-fade-in-up animation-delay-400 italic">Associate Professor (Practice)</span>
+                <span class="block mb-2 animate-fade-in-up animation-delay-500 italic">Circular Economy Champion</span>
+                <span class="block animate-fade-in-up animation-delay-600 italic">Sustainability Leader</span>
+              </h2>
+              
+              <p class="text-lg text-gray-700 max-w-2xl leading-relaxed animate-fade-up delay-800">
+                <span class="inline-block animate-highlight-text">Pioneering transformative education</span> 
+                <span class="inline-block animate-highlight-text">and entrepreneurship to accelerate</span> 
+                <span class="inline-block animate-highlight-text">the transition towards a sustainable</span> 
+                <span class="inline-block animate-highlight-text">circular economy and create an</span> 
+                <span class="inline-block animate-highlight-text">equitable future for all.</span>
+              </p>
+            </div>
+            
+            <!-- CTA Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 animate-fadeInUp delay-300">
+              <a href="#contact" class="inline-flex items-center bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-8 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg group">
+                Get In Touch
+                <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                </svg>
+              </a>
+              <a href="#expertise" class="inline-flex items-center bg-white text-green-600 border-2 border-green-600 font-bold py-4 px-8 rounded-full transition-all duration-300 hover:bg-green-600 hover:text-white hover:shadow-lg">
+                Explore My Work
+              </a>
+            </div>
+            
+            <!-- Social proof -->
+            <div class="flex items-center space-x-8 animate-fadeInUp delay-600">
+              <div class="flex items-center space-x-2">
+                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                  <span class="text-green-600 text-lg font-bold">1K+</span>
+                </div>
+                <span class="text-sm text-gray-600">Students<br/>Impacted</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                  <span class="text-green-600 text-lg font-bold">10+</span>
+                </div>
+                <span class="text-sm text-gray-600">Countries<br/>Reaching</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Image -->
+          <div class="lg:col-span-5 animate-fadeInRight">
+            <div class="relative">
+              <div class="absolute inset-0 bg-gradient-to-br from-green-500 via-emerald-400 to-blue-500 rounded-3xl transform rotate-2 animate-float transition-all duration-500 group-hover:rotate-[-3deg] group-hover:scale-105"></div>
+              <div class="relative bg-white/95 backdrop-blur-sm rounded-3xl p-3 shadow-2xl transition-all duration-500 group-hover:shadow-[-20px_-20px_0px_1px_rgba(16,185,107,0.1),20px_20px_0px_1px_rgba(37,99,235,0.1)] group-hover:scale-[1.02]">
+                <div class="relative overflow-hidden rounded-3xl">
+                  <img
+                    src="images/profile.png"
+                    alt="Dr. Lerwen Liu"
+                    class="w-full h-96 rounded-2xl object-cover transition-all duration-700 group-hover:scale-[1.15] group-hover:brightness-110 group-hover:contrast-105"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-t from-green-600/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700 backdrop-blur-[1px]"></div>
+                  <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-700">
+                    <div class="absolute w-32 h-32 bg-green-400/20 rounded-full blur-2xl animate-pulse"></div>
+                    <span class="relative z-10 bg-white/90 backdrop-blur-sm border border-green-200 text-green-800 px-4 py-2 rounded-full text-sm font-medium shadow-lg">
+                      🌱 Circular Expert
+                    </span>
+                  </div>
+                </div>
+                <div class="absolute -bottom-6 -left-6 bg-gradient-to-r from-green-600 to-green-700 text-white px-5 py-3 rounded-full text-sm font-semibold transition-all duration-500 group-hover:from-green-700 group-hover:to-green-800 group-hover:scale-110 shadow-lg">
+                  Dr. Lerwen Liu
+                  <div class="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Scroll indicator -->
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce hidden md:block">
+        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Add new animations -->
+    <style>
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      @keyframes fadeInRight {
+        from {
+          opacity: 0;
+          transform: translateX(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      
+      .animate-fadeInUp {
+        animation: fadeInUp 0.8s ease-out forwards;
+      }
+      
+      .animate-fadeInRight {
+        animation: fadeInRight 0.8s ease-out forwards;
+      }
+      
+      /* Text reveal animation */
+      @keyframes textReveal {
+        0% {
+          clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        100% {
+          clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      .animate-text-reveal {
+        display: inline-block;
+        position: relative;
+        animation: textReveal 1.2s cubic-bezier(0.77, 0, 0.18, 1) forwards;
+        overflow: hidden;
+      }
+      
+      /* Fade in up for subtitle */
+      @keyframes fade-in-up {
+        0% {
+          opacity: 0;
+          transform: translateY(40px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      .animate-fade-in-up {
+        animation: fade-in-up 0.8s ease-out forwards;
+      }
+      
+      /* Slide up with fade */
+      @keyframes slide-up {
+        0% {
+          opacity: 0;
+          transform: translateY(40px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      .animate-slide-up {
+        animation: slide-up 1s ease-out forwards;
+      }
+      
+      /* Fade up for paragraph */
+      @keyframes fade-up {
+        0% {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      .animate-fade-up {
+        animation: fade-up 1.2s ease-out forwards;
+      }
+      
+      /* Highlight text animation */
+      @keyframes highlight-text {
+        0% {
+          background-size: 0% 100%;
+          background-position: 0% 100%;
+        }
+        100% {
+          background-size: 100% 100%;
+          background-position: 100% 100%;
+        }
+      }
+      
+      .animate-highlight-text {
+        display: inline-block;
+        position: relative;
+        background-image: linear-gradient(transparent 60%, rgba(16, 185, 107, 0.3) 60%);
+        background-repeat: no-repeat;
+        background-size: 0% 100%;
+        animation: highlight-text 2s ease-out 1.5s forwards;
+      }
+      
+      /* Slide in from left */
+      @keyframes slide-in-left {
+        0% {
+          transform: translateX(-100%);
+          opacity: 0;
+        }
+        100% {
+          transform: translateX(0%);
+          opacity: 1;
+        }
+      }
+      
+      .animate-slide-in-left {
+        animation: slide-in-left 0.8s ease-out forwards;
+      }
+      
+      .delay-100 { animation-delay: 0.1s; }
+      .delay-200 { animation-delay: 0.2s; }
+      .delay-300 { animation-delay: 0.3s; }
+      .delay-400 { animation-delay: 0.4s; }
+      .delay-800 { animation-delay: 0.8s; }
+      
+      .animation-delay-400 { animation-delay: 0.4s; }
+      .animation-delay-500 { animation-delay: 0.5s; }
+      .animation-delay-600 { animation-delay: 0.6s; }
+      
+      /* Enhanced hover effects for image */
+      .hover\:shadow-3xl:hover {
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      }
+      
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+      }
+      
+      .animate-float {
+        animation: float 6s ease-in-out infinite;
+      }
+    </style>
+
+    <style>
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-12px); }
+      }
+      
+      .animate-float {
+        animation: float 8s ease-in-out infinite;
+      }
+      
+      .delay-1000 { animation-delay: 1s; }
+    </style>
+
+    <!-- About Section -->
+    <section id="about" class="py-32 bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100 relative overflow-hidden">
+
+      <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute top-0 -left-4 w-96 h-96 bg-gradient-to-br from-emerald-300/20 via-green-300/10 to-teal-300/20 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 -right-4 w-96 h-96 bg-gradient-to-bl from-teal-300/20 via-emerald-300/10 to-green-300/20 rounded-full blur-3xl"></div>
+        <div class="absolute top-1/2 left-1/2 w-64 h-64 bg-gradient-to-r from-green-300/15 via-emerald-300/10 to-teal-300/15 rounded-full blur-2xl animate-slow-spin"></div>
+      </div>
+
+      <div class="absolute inset-0 bg-gradient-to-tr from-emerald-400/5 via-transparent to-teal-400/5"></div>
+      
+      <div class="relative z-10 max-w-7xl mx-auto px-6">
+
+        <h2 class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-green-600 to-teal-600 mb-8 text-center tracking-tight">
+          About Dr. Lerwen Liu
+        </h2>
+
+          <div class="w-32 h-1 mx-auto mb-16 bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 rounded-full"></div>
+
+        
+
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row gap-16 px-6">
+          <!-- Side panel: mission highlight with glass morphism -->
+          <aside class="md:w-1/3 relative group">
+            
+            <div class="relative bg-white/80 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl p-4 px-8 flex flex-col justify-center items-center text-center ring-1 ring-green-200/20">
+              <div class="absolute inset-0 bg-gradient-to-br from-emerald-50/50 via-transparent to-teal-50/50 rounded-3xl"></div>
+              <div class="relative z-10">
+                <div class="absolute -top-4 -left-4 w-8 h-8 bg-gradient-to-br from-emerald-400 to-green-500 rounded-full blur-md opacity-60 animate-pulse"></div>
+                <span class="text-6xl text-transparent bg-clip-text bg-gradient-to-br from-emerald-400 to-green-600 font-serif leading-none">"</span>
+                <p class="text-lg text-gray-700 italic font-light leading-relaxed tracking-wide px-4">
+  Empowering the next generation with purpose-driven innovation,
+                  <span class="block text-xl font-bold bg-gradient-to-r from-emerald-700 to-green-800 text-transparent bg-clip-text mt-3">
+    building a future shaped by sustainability and circularity.
+                  </span>
+                </p>
+                <span class="text-6xl text-transparent bg-clip-text bg-gradient-to-tr from-emerald-400 to-green-600 font-serif leading-none">"</span>
+                <div class="absolute -bottom-4 -right-4 w-6 h-6 bg-gradient-to-br from-teal-400 to-emerald-500 rounded-full blur-md opacity-70 animate-pulse delay-700"></div>
+              </div>
+            </div>
+            <div class="relative mt-10 bg-white/80 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl p-4 px-8 flex flex-col justify-center items-center text-center ring-1 ring-green-200/20">
+              <div class="absolute inset-0 bg-gradient-to-br from-emerald-50/50 via-transparent to-teal-50/50 rounded-3xl"></div>
+              <div class="relative z-10">
+                <div class="absolute -top-4 -left-4 w-8 h-8 bg-gradient-to-br from-emerald-400 to-green-500 rounded-full blur-md opacity-60 animate-pulse"></div>
+                <span class="text-6xl text-transparent bg-clip-text bg-gradient-to-br from-emerald-400 to-green-600 font-serif leading-none">"</span>
+                <p class="text-lg text-gray-700 italic font-light leading-relaxed tracking-wide px-4">
+  Bridging academia, industry, and youth leadership
+                  <span class="block text-xl font-bold bg-gradient-to-r from-emerald-700 to-green-800 text-transparent bg-clip-text mt-3">
+                    towards a sustainable circular    to drive global transformation towards a circular economy.
+ economy and future.
+                  </span>
+                </p>
+                <span class="text-6xl text-transparent bg-clip-text bg-gradient-to-tr from-emerald-400 to-green-600 font-serif leading-none">"</span>
+                <div class="absolute -bottom-4 -right-4 w-6 h-6 bg-gradient-to-br from-teal-400 to-emerald-500 rounded-full blur-md opacity-70 animate-pulse delay-700"></div>
+              </div>
+            </div>
+          </aside>
+
+          <!-- Main text content with glass morphism timeline -->
+          <article class="md:w-2/3 bg-white/70 backdrop-blur-xl border border-white/30 rounded-3xl shadow-2xl p-12 space-y-8 relative group hover:bg-white/80 transition-all duration-500 ring-1 ring-green-100/20">
+            <!-- Animated background elements -->
+            <div class="absolute top-6 right-6 w-20 h-20 bg-gradient-to-br from-emerald-200 to-green-200 rounded-full blur-2xl opacity-30 animate-float"></div>
+            <div class="absolute bottom-8 left-8 w-16 h-16 bg-gradient-to-br from-teal-200 to-emerald-200 rounded-full blur-2xl opacity-30 animate-float delay-1000"></div>
+            
+            <!-- Vertical timeline -->
+            <div class="absolute top-14 left-8 bottom-16 w-0.5 bg-gradient-to-b from-emerald-300 via-green-300 to-teal-400 rounded-full hidden md:block opacity-60"></div>
+
+            <!-- Timeline items -->
+            <div class="relative pl-20 group/timeline-item">
+              <div class="absolute left-2 top-1 w-12 h-12 bg-gradient-to-br from-emerald-400 via-green-500 to-teal-600 rounded-full flex justify-center items-center text-white shadow-xl ring-4 ring-white/50 group-hover/timeline-item:scale-110 transition-all duration-500 hover:shadow-emerald-200/50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.042 12.042 0 01.84 4.422c0 4.418-3.582 8-8 8s-8-3.582-8-8a12.042 12.042 0 01.84-4.422L12 14z" />
+                </svg>
+              </div>
+              <div class="bg-gradient-to-r from-emerald-50/60 via-green-50/40 to-transparent rounded-2xl p-2 border border-emerald-100/30 hover:border-emerald-200/50 hover:shadow-md transition-all duration-500 group-hover/timeline-item:scale-[1.02]">
+                <p class="text-gray-700 leading-relaxed text-base">
+                  Dr. Lerwen Liu is an esteemed Associate Professor (Practice) at Nanyang Technological University (NTU),
+                  with a distinguished career focusing on circular economy, sustainability-driven entrepreneurship, and
+                  emerging technologies. Her academic leadership is marked by a passion for transforming education and
+                  empowering the next generation of sustainability innovators worldwide.
+                </p>
+              </div>
+            </div>
+
+            <div class="relative pl-20 group/timeline-item">
+              <div class="absolute left-2 top-1 w-12 h-12 bg-gradient-to-br from-emerald-400 via-green-500 to-teal-600 rounded-full flex justify-center items-center text-white shadow-xl ring-4 ring-white/50 group-hover/timeline-item:scale-110 transition-all duration-500 hover:shadow-emerald-200/50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <div class="bg-gradient-to-r from-green-50/60 via-teal-50/40 to-transparent rounded-2xl p-6 border border-green-100/30 hover:border-green-200/50 hover:shadow-md transition-all duration-500 group-hover/timeline-item:scale-[1.02]">
+                <p class="text-gray-700 leading-relaxed text-base">
+                  With global collaborations and a vision rooted in youth empowerment, Dr. Liu actively fosters
+                  sustainability-driven innovation across multiple disciplines, bridging research, policy, and
+                  entrepreneurship to accelerate the transition towards a circular, low-carbon economy.
+                </p>
+              </div>
+            </div>
+
+            <div class="relative pl-20 group/timeline-item">
+              <div class="absolute left-2 top-1 w-12 h-12 bg-gradient-to-br from-emerald-400 via-green-500 to-teal-600 rounded-full flex justify-center items-center text-white shadow-xl ring-4 ring-white/50 group-hover/timeline-item:scale-110 transition-all duration-500 hover:shadow-emerald-200/50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 01-8 0M12 14v7m0-7a4 4 0 00-4 4h8a4 4 0 00-4-4z" />
+                </svg>
+              </div>
+              <div class="bg-gradient-to-r from-teal-50/60 via-emerald-50/40 to-transparent rounded-2xl p-6 border border-teal-100/30 hover:border-teal-200/50 hover:shadow-md transition-all duration-500 group-hover/timeline-item:scale-[1.02]">
+                <p class="text-gray-700 font-medium">
+                  Connect with her on
+                  <a href="https://www.linkedin.com/in/lerwenliu" target="_blank" rel="noopener" class="text-emerald-600 font-bold underline decoration-emerald-400 decoration-2 hover:text-emerald-700 hover:decoration-emerald-600 transition-all duration-300">
+                    LinkedIn
+                  </a>
+                  or explore her work on the
+                  <a href="https://steam-platform.example.com" target="_blank" rel="noopener" class="text-emerald-600 font-bold underline decoration-emerald-400 decoration-2 hover:text-emerald-700 hover:decoration-emerald-600 transition-all duration-300">
+                    STEAM Platform
+                  </a>.
+                </p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Expertise Section -->
+    <section id="expertise" class="py-32 bg-gradient-to-br from-green-50 via-emerald-50 via-blue-50 to-teal-50 relative overflow-hidden">
+      <!-- Floating background elements -->
+      <div class="absolute inset-0">
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-emerald-300/20 to-teal-300/20 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-green-300/20 to-blue-300/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div class="absolute top-1/2 left-1/3 w-64 h-64 bg-gradient-to-r from-teal-300/10 to-emerald-300/10 rounded-full blur-2xl animate-bounce"></div>
+      </div>
+
+      <div class="relative z-10 max-w-7xl mx-auto px-6">
+        <div class="text-center mb-20">
+          <h2 class="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-emerald-600 via-green-600 to-teal-600 bg-clip-text text-transparent animate-fade-in-up">
+            Areas of Expertise
+          </h2>
+          <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            Explore specialized domains where cutting-edge research meets practical implementation in sustainability leadership and innovation
+          </p>
+          <div class="w-32 h-1 mx-auto mt-6 bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 rounded-full"></div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <!-- Expertise Card 1 -->
+          <article class="group relative bg-white/80 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl p-8 flex flex-col items-center text-center ring-1 ring-green-200/20 hover:ring-emerald-200/50 transition-all duration-500 hover:scale-105 ">
+            <div class="absolute -top-4 -left-4 w-20 h-20 bg-gradient-to-br from-emerald-400 to-green-500 rounded-full blur-2xl opacity-60 group-hover:opacity-80 transition-all duration-500 animate-pulse"></div>
+            <div class="relative z-10 mb-6 p-5 bg-gradient-to-br from-emerald-400/20 to-green-500/20 rounded-2xl backdrop-blur-sm border border-emerald-200/30">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14 text-gradient-to-br from-emerald-600 to-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" focusable="false">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6h13M9 6l-5 5m0 0v6a2 2 0 002 2h1.5a2 2 0 002-2v-1" />
+              </svg>
+            </div>
+            <h3 class="font-bold text-xl text-gray-800 mb-4 bg-gradient-to-r from-emerald-700 to-green-700 bg-clip-text text-transparent">
+              Circular Economy Strategy
+            </h3>
+            <p class="text-gray-600 text-sm leading-relaxed">
+              Developing innovative strategies that promote resource efficiency and sustainable lifecycle.
+            </p>
+            <div class="mt-auto pt-6">
+              <div class="w-full h-1 bg-gradient-to-r from-transparent via-emerald-400/50 to-transparent rounded-full scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+            </div>
+          </article>
+
+          <!-- Expertise Card 2 -->
+          <article class="group relative bg-white/80 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl p-8 flex flex-col items-center text-center ring-1 ring-green-200/20 hover:ring-emerald-200/50 transition-all duration-500 hover:scale-105 ">
+            <div class="absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-br from-teal-400 to-emerald-500 rounded-full blur-2xl opacity-60 group-hover:opacity-80 transition-all duration-500 animate-pulse delay-300"></div>
+            <div class="relative z-10 mb-6 p-5 bg-gradient-to-br from-teal-400/20 to-emerald-500/20 rounded-2xl backdrop-blur-sm border border-teal-200/30">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14 text-gradient-to-br from-teal-600 to-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" focusable="false">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h8m-4-4v8m6 0a2 2 0 01-2 2h-8a2 2 0 01-2-2v-8a2 2 0 012-2h3" />
+              </svg>
+            </div>
+            <h3 class="font-bold text-xl text-gray-800 mb-4 bg-gradient-to-r from-teal-700 to-emerald-700 bg-clip-text text-transparent">
+              Entrepreneurship Education
+            </h3>
+            <p class="text-gray-600 text-sm leading-relaxed">
+              Empowering learners with entrepreneurial skills rooted in sustainability principles to drive impactful innovation.
+            </p>
+            <div class="mt-auto pt-6">
+              <div class="w-full h-1 bg-gradient-to-r from-transparent via-teal-400/50 to-transparent rounded-full scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+            </div>
+          </article>
+
+          <!-- Expertise Card 3 -->
+          <article class="group relative bg-white/80 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl p-8 flex flex-col items-center text-center ring-1 ring-green-200/20 hover:ring-emerald-200/50 transition-all duration-500 hover:scale-105 ">
+            <div class="absolute bottom-4 left-2 w-20 h-20 bg-gradient-to-br from-blue-400 to-teal-500 rounded-full blur-2xl opacity-60 group-hover:opacity-80 transition-all duration-500 animate-pulse delay-700"></div>
+            <div class="relative z-10 mb-6 p-5 bg-gradient-to-br from-blue-400/20 to-teal-500/20 rounded-2xl backdrop-blur-sm border border-blue-200/30">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14 text-gradient-to-br from-blue-600 to-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" focusable="false">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m4-2a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+            </div>
+            <h3 class="font-bold text-xl text-gray-800 mb-4 bg-gradient-to-r from-blue-700 to-teal-700 bg-clip-text text-transparent">
+              Youth Leadership
+            </h3>
+            <p class="text-gray-600 text-sm leading-relaxed">
+              Cultivating leadership capacities among young changemakers to spearhead sustainability transformations globally.
+            </p>
+            <div class="mt-auto pt-6">
+              <div class="w-full h-1 bg-gradient-to-r from-transparent via-blue-400/50 to-transparent rounded-full scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+            </div>
+          </article>
+
+          <!-- Expertise Card 4 -->
+          <article class="group relative bg-white/80 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl p-8 flex flex-col items-center text-center ring-1 ring-green-200/20 hover:ring-emerald-200/50 transition-all duration-500 hover:scale-105 ">
+            <div class="absolute top-8 right-4 w-20 h-20 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full blur-2xl opacity-60 group-hover:opacity-80 transition-all duration-500 animate-pulse delay-500"></div>
+            <div class="relative z-10 mb-6 p-5 bg-gradient-to-br from-green-400/20 to-emerald-500/20 rounded-2xl backdrop-blur-sm border border-green-200/30">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14 text-gradient-to-br from-green-600 to-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" focusable="false">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0-1.104-.896-2-2-2s-2 .896-2 2 .896 2 2 2 2-.896 2-2zM14 14v4h-4v-4h4zm-7-1v3H5v-3h2zm10 0v3h-2v-3h2z" />
+              </svg>
+            </div>
+            <h3 class="font-bold text-xl text-gray-800 mb-4 bg-gradient-to-r from-green-700 to-emerald-700 bg-clip-text text-transparent">
+              Sustainability Policy & Research
+            </h3>
+            <p class="text-gray-600 text-sm leading-relaxed">
+              Leading interdisciplinary research and policy initiatives to support sustainable development.
+            </p>
+            <div class="mt-auto pt-6">
+              <div class="w-full h-1 bg-gradient-to-r from-transparent via-green-400/50 to-transparent rounded-full scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 border-t border-green-200 bg-white">
+      <h2 class="text-3xl font-bold text-green-800 mb-12 text-center">Key Projects & Initiatives</h2>
+      <div class="max-w-6xl mx-auto grid gap-10 px-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <!-- Project Card 1 -->
+        <article class="bg-green-50 rounded-lg shadow-lg p-6 hover:shadow-xl transition">
+          <h3 class="text-xl font-semibold text-green-900 mb-2">Circular Economy Education Program</h3>
+          <p class="text-gray-700 text-sm mb-4">
+            Designed and led an interdisciplinary curriculum integrating circular economy principles into entrepreneurship education, impacting over 1,000 students globally.
+          </p>
+          <a href="https://example.com/circular-education" target="_blank" rel="noopener" class="text-green-700 underline hover:text-green-900 focus:outline-none focus:ring-2 focus:ring-green-500 transition">
+            Learn More
+          </a>
+        </article>
+        <!-- Project Card 2 -->
+        <article class="bg-green-50 rounded-lg shadow-lg p-6 hover:shadow-xl transition">
+          <h3 class="text-xl font-semibold text-green-900 mb-2">Youth Sustainability Leadership Forum</h3>
+          <p class="text-gray-700 text-sm mb-4">
+            Facilitated global youth forums to foster leadership and innovation for sustainable development, collaborating with NGOs and policy makers.
+          </p>
+          <a href="https://example.com/youth-forum" target="_blank" rel="noopener" class="text-green-700 underline hover:text-green-900 focus:outline-none focus:ring-2 focus:ring-green-500 transition">
+            Learn More
+          </a>
+        </article>
+        <!-- Project Card 3 -->
+        <article class="bg-green-50 rounded-lg shadow-lg p-6 hover:shadow-xl transition">
+          <h3 class="text-xl font-semibold text-green-900 mb-2">STEAM Platform Development</h3>
+          <p class="text-gray-700 text-sm mb-4">
+            Spearheaded the development of an online STEAM platform that integrates sustainability tools and resources for educators and entrepreneurs.
+          </p>
+          <a href="https://steam-platform.example.com" target="_blank" rel="noopener" class="text-green-700 underline hover:text-green-900 focus:outline-none focus:ring-2 focus:ring-green-500 transition">
+            Explore Platform
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section id="blog" class="py-32 bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100 relative overflow-hidden">
+      <!-- Animated background elements -->
+      <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute top-0 -left-4 w-96 h-96 bg-gradient-to-br from-emerald-300/20 via-green-300/10 to-teal-300/20 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 -right-4 w-96 h-96 bg-gradient-to-bl from-teal-300/20 via-emerald-300/10 to-green-300/20 rounded-full blur-3xl"></div>
+        <div class="absolute top-1/2 left-1/2 w-64 h-64 bg-gradient-to-r from-green-300/15 via-emerald-300/10 to-teal-300/15 rounded-full blur-2xl animate-slow-spin"></div>
+      </div>
+
+      <div class="relative z-10 max-w-7xl mx-auto px-6">
+        <!-- Section Header -->
+        <div class="text-center mb-16">
+          <h2 class="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-emerald-600 via-green-600 to-teal-600 bg-clip-text text-transparent animate-fade-in-up">
+            Newsletter & Blogs
+          </h2>
+          <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            Discover thought leadership in circular economy, sustainability entrepreneurship, and youth innovation through our latest articles and newsletters
+          </p>
+          <div class="w-32 h-1 mx-auto mt-8 bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 rounded-full"></div>
+        </div>
+
+        <!-- Enhanced Toggle Navigation -->
+        <div class="flex justify-center mb-12">
+          <div class="bg-white/80 backdrop-blur-md border border-white/30 rounded-full p-1.5 flex space-x-1 shadow-xl">
+            <button id="newsletter-toggle" class="toggle-btn px-8 py-3 rounded-full font-semibold text-lg transition-all duration-500 bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg hover:shadow-xl">
+              Newsletters
+            </button>
+            <button id="blog-toggle" class="toggle-btn px-8 py-3 rounded-full font-semibold text-lg transition-all duration-500 text-gray-600 hover:text-gray-800">
+              Blogs
+            </button>
+          </div>
+        </div>
+
+        <!-- Modern Grid Layout -->
+        <div id="blog-grid" class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8 px-6 items-stretch">
+          <!-- Loading state will be replaced -->
+          <div class="text-center py-8 text-gray-600 col-span-full">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
+            <p class="mt-4 text-gray-500">Loading latest insights...</p>
+          </div>
+        </div>
+
+        <!-- Enhanced Load More Buttons -->
+        <div class="text-center mt-16 space-y-4">
+          <button id="show-more-newsletters-btn" class="show-more-btn bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold py-4 px-8 rounded-full transition-all duration-500 focus:ring-4 focus:ring-green-400 focus:outline-none hidden shadow-lg hover:shadow-xl transform hover:scale-105">
+            <span class="flex items-center">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8l-8 8-8-8"></path>
+              </svg>
+              Load More Newsletters
+            </span>
+          </button>
+          <button id="show-more-blogs-btn" class="show-more-btn bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold py-4 px-8 rounded-full transition-all duration-500 focus:ring-4 focus:ring-emerald-400 focus:outline-none hidden shadow-lg hover:shadow-xl transform hover:scale-105">
+            <span class="flex items-center">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8l-8 8-8-8"></path>
+              </svg>
+              Load More Blogs
+            </span>
+          </button>
+        </div>
+
+        
+      </div>
+
+      <!-- Additional Styles -->
+      <style>
+        @keyframes slow-spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .animate-slow-spin {
+          animation: slow-spin 20s linear infinite;
+        }
+        
+        @keyframes fade-in-up {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-fade-in-up {
+          animation: fade-in-up 0.8s ease-out forwards;
+        }
+        
+        .show-more-btn {
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .toggle-btn {
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Staggered card animations */
+        .card-animation-stagger:nth-child(1) { animation-delay: 0.1s; }
+        .card-animation-stagger:nth-child(2) { animation-delay: 0.2s; }
+        .card-animation-stagger:nth-child(3) { animation-delay: 0.3s; }
+        .card-animation-stagger:nth-child(4) { animation-delay: 0.4s; }
+      </style>
+    </section>
+
+    <!-- Publications Section -->
+    <section id="publications" class="py-20 border-t border-green-200 bg-green-50">
+      <h2 class="text-3xl font-bold text-green-800 mb-12 text-center">Selected Publications</h2>
+      <div class="max-w-4xl mx-auto space-y-8 px-6">
+        <article class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
+          <h3 class="text-xl font-semibold text-green-900 mb-1">“Advancing Circular Economy Practices in Higher Education”</h3>
+          <p class="text-gray-700 text-sm italic mb-2">Journal of Sustainability Education, 2023</p>
+          <p class="text-gray-700 text-sm">
+            This publication explores innovative pedagogical frameworks to integrate circular economy concepts within university curricula.
+          </p>
+          <a href="https://example.com/publication1" target="_blank" rel="noopener" class="text-green-700 underline hover:text-green-900 focus:outline-none focus:ring-2 focus:ring-green-500 transition">
+            Read More
+          </a>
+        </article>
+        <article class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
+          <h3 class="text-xl font-semibold text-green-900 mb-1">“Youth Leadership for Sustainable Development Goals”</h3>
+          <p class="text-gray-700 text-sm italic mb-2">Sustainability Leadership Review, 2022</p>
+          <p class="text-gray-700 text-sm">
+            A study examining the role of youth leadership programs in accelerating progress toward the UN SDGs.
+          </p>
+          <a href="https://example.com/publication2" target="_blank" rel="noopener" class="text-green-700 underline hover:text-green-900 focus:outline-none focus:ring-2 focus:ring-green-500 transition">
+            Read More
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-32 bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100 relative overflow-hidden">
+      <!-- Background decorations -->
+      <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute top-0 -right-4 w-96 h-96 bg-gradient-to-br from-emerald-300/20 via-green-300/10 to-teal-300/20 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 -left-4 w-96 h-96 bg-gradient-to-tl from-teal-300/20 via-emerald-300/10 to-green-300/20 rounded-full blur-3xl"></div>
+        <div class="absolute top-1/3 left-1/4 w-64 h-64 bg-gradient-to-r from-green-300/15 via-emerald-300/10 to-teal-300/15 rounded-full blur-2xl animate-slow-spin"></div>
+      </div>
+
+      <div class="relative z-10 max-w-4xl mx-auto px-6">
+        <!-- Section Header -->
+        <div class="text-center mb-12">
+          <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            Get in Touch
+          </h2>
+          <p class="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            Ready to collaborate or have questions about circular economy, sustainability entrepreneurship, or educational initiatives? Let's connect.
+          </p>
+          <div class="w-32 h-1 mx-auto mt-6 bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 rounded-full"></div>
+        </div>
+
+        <!-- Enhanced Contact Form -->
+        <div class="bg-white/90 backdrop-blur-xl border border-white/30 rounded-3xl shadow-2xl p-8 md:p-12 relative overflow-hidden">
+          <!-- Background decoration -->
+          <div class="absolute -top-16 -right-8 w-32 h-32 bg-gradient-to-br from-green-200/30 to-emerald-200/30 rounded-full blur-xl"></div>
+          <div class="absolute -bottom-16 -left-8 w-32 h-32 bg-gradient-to-tr from-teal-200/30 to-emerald-200/30 rounded-full blur-xl"></div>
+          
+          <div class="relative z-10">
+            <form id="contact-form" action="https://formspree.io/f/mgebnrlw" method="POST" class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label for="name" class="block text-gray-700 font-semibold mb-2 text-sm uppercase tracking-wide">Full Name</label>
+                  <input type="text" id="name" name="name" required 
+                    class="w-full px-4 py-3 text-base border border-gray-200 rounded-full bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-4 focus:ring-green-400 focus:border-transparent placeholder-gray-400 transition-all duration-300" 
+                    placeholder="Your full name" 
+                  />
+                </div>
+                
+                <div>
+                  <label for="email" class="block text-gray-700 font-semibold mb-2 text-sm uppercase tracking-wide">Email Address</label>
+                  <input type="email" id="email" name="_replyto" required 
+                    class="w-full px-4 py-3 text-base border border-gray-200 rounded-full bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-4 focus:ring-green-400 focus:border-transparent placeholder-gray-400 transition-all duration-300" 
+                    placeholder="your.email@domain.com" 
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label for="subject" class="block text-gray-700 font-semibold mb-2 text-sm uppercase tracking-wide">Subject</label>
+                <select id="subject" name="subject" 
+                  class="w-full px-4 py-3 text-base border border-gray-200 rounded-full bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-4 focus:ring-green-400 focus:border-transparent transition-all duration-300">
+                  <option value="">Select a topic</option>
+                  <option value="collaboration">Collaboration Opportunity</option>
+                  <option value="speaking">Speaking Engagement</option>
+                  <option value="consulting">Consulting Services</option>
+                  <option value="education">Educational Programs</option>
+                  <option value="research">Research & Studies</option>
+                  <option value="media">Media & Press</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="message" class="block text-gray-700 font-semibold mb-2 text-sm uppercase tracking-wide">Message</label>
+                <textarea id="message" name="message" rows="5" required 
+                  class="w-full px-4 py-3 text-base border border-gray-200 rounded-2xl bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-4 focus:ring-green-400 focus:border-transparent placeholder-gray-400 transition-all duration-300 resize-none"
+                  placeholder="Tell me about your project, collaboration, or how I can help you..."></textarea>
+              </div>
+
+              <div class="text-center">
+                <button type="submit"
+                  class="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold py-4 px-8 rounded-full transition-all duration-500 hover:from-green-700 hover:to-emerald-700 hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-green-400 flex items-center justify-center space-x-2 group">
+                  <span>Send Message</span>
+                  <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                  </svg>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Contact Info Alternative -->
+        <div class="text-center mt-12">
+          <p class="text-gray-600 mb-4">Prefer to email directly?</p>
+          <a href="mailto:lerwen.liu@ntu.edu.sg" class="text-green-600 hover:text-green-700 font-semibold text-lg">
+            lerwen.liu@ntu.edu.sg
+          </a>
+        </div>
+      </div>
+
+      <style>
+        .animate-slow-spin {
+          animation: slow-spin 20s linear infinite;
+        }
+        
+        @keyframes slow-spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      </style>
+    </section>
+
+  </main>
+
+  <!-- Modern Footer -->
+  <footer class="relative bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 text-gray-100 overflow-hidden">
+    <!-- Animated background -->
+    <div class="absolute inset-0 overflow-hidden">
+      <div class="absolute top-0 -left-16 w-96 h-96 bg-gradient-to-br from-emerald-500/10 via-green-500/5 to-teal-500/10 rounded-full blur-3xl animate-pulse"></div>
+      <div class="absolute bottom-0 -right-16 w-96 h-96 bg-gradient-to-tl from-teal-500/10 via-emerald-500/5 to-green-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-green-500/8 to-emerald-500/8 rounded-full blur-2xl animate-bounce delay-300"></div>
+    </div>
+    
+    <div class="relative z-10 max-w-7xl mx-auto px-6 py-20">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <!-- Brand -->
+        <div class="lg:col-span-1">
+          <div class="flex items-center space-x-3 mb-6">
+            <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center shadow-lg">
+              <span class="text-white font-bold text-lg">LL</span>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold text-white">Dr. Lerwen Liu</h3>
+              <p class="text-green-400 text-sm">Circular Economy Leader</p>
+            </div>
+          </div>
+          <p class="text-gray-300 text-sm leading-relaxed mb-6">
+            Pioneering transformative education and entrepreneurship to accelerate the transition towards a sustainable circular economy.
+          </p>
+          <div class="flex space-x-4">
+            <a href="https://www.linkedin.com/in/lerwenliu" target="_blank" rel="noopener" class="w-10 h-10 bg-gradient-to-br from-green-600 to-emerald-600 rounded-full flex items-center justify-center hover:scale-110 transition-transform duration-300 shadow-lg" aria-label="LinkedIn">
+              <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+              </svg>
+            </a>
+            <a href="https://steam-platform.example.com" target="_blank" rel="noopener" class="w-10 h-10 bg-gradient-to-br from-teal-600 to-emerald-600 rounded-full flex items-center justify-center hover:scale-110 transition-transform duration-300 shadow-lg" aria-label="STEAM Platform">
+              <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div>
+          <h4 class="text-lg font-bold text-white mb-4">Quick Links</h4>
+          <ul class="space-y-3">
+            <li><a href="#about" class="text-gray-300 hover:text-green-400 transition-colors duration-300 text-sm hover:translate-x-1 transform transition-transform">About</a></li>
+            <li><a href="#expertise" class="text-gray-300 hover:text-green-400 transition-colors duration-300 text-sm hover:translate-x-1 transform transition-transform">Expertise</a></li>
+            <li><a href="#projects" class="text-gray-300 hover:text-green-400 transition-colors duration-300 text-sm hover:translate-x-1 transform transition-transform">Projects</a></li>
+            <li><a href="#blog" class="text-gray-300 hover:text-green-400 transition-colors duration-300 text-sm hover:translate-x-1 transform transition-transform">Blog & Newsletter</a></li>
+            <li><a href="#publications" class="text-gray-300 hover:text-green-400 transition-colors duration-300 text-sm hover:translate-x-1 transform transition-transform">Publications</a></li>
+          </ul>
+        </div>
+
+        <!-- Areas of Focus -->
+        <div>
+          <h4 class="text-lg font-bold text-white mb-4">Research Focus</h4>
+          <ul class="space-y-3">
+            <li class="text-gray-300 text-sm flex items-center">
+              <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+              Circular Economy Strategy
+            </li>
+            <li class="text-gray-300 text-sm flex items-center">
+              <span class="w-2 h-2 bg-emerald-500 rounded-full mr-2"></span>
+              Entrepreneurship Education
+            </li>
+            <li class="text-gray-300 text-sm flex items-center">
+              <span class="w-2 h-2 bg-teal-500 rounded-full mr-2"></span>
+              Youth Leadership
+            </li>
+            <li class="text-gray-300 text-sm flex items-center">
+              <span class="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
+              Sustainability Policy
+            </li>
+            <li class="text-gray-300 text-sm flex items-center">
+              <span class="w-2 h-2 bg-emerald-400 rounded-full mr-2"></span>
+              Emerging Technologies
+            </li>
+          </ul>
+        </div>
+
+        <!-- Newsletter -->
+        <div>
+          <h4 class="text-lg font-bold text-white mb-4">Stay Connected</h4>
+          <p class="text-gray-300 text-sm mb-4">
+            Get the latest insights on circular economy and sustainability.
+          </p>
+          <form class="space-y-3">
+            <input 
+              type="email" 
+              placeholder="Your email" 
+              class="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-full text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
+            >
+            <button type="submit" class="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-2 px-4 rounded-full text-sm font-semibold hover:shadow-lg hover:scale-105 transition-all duration-300">
+              Subscribe
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="border-t border-gray-800 max-w-7xl mx-auto px-6 py-8">
+        <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+          <div class="text-gray-400 text-sm">
+            &copy; 2025 Dr. Lerwen Liu. All rights reserved.
+          </div>
+          
+          <div class="flex flex-wrap justify-center space-x-6 text-xs text-gray-400">
+            <a href="#" class="hover:text-green-400 transition-colors">Privacy Policy</a>
+            <a href="#" class="hover:text-green-400 transition-colors">Terms of Use</a>
+            <a href="#" class="hover:text-green-400 transition-colors">Privacy</a>
+          </div>
+          
+          <div class="text-gray-400 text-xs">
+            Built with <span class="text-green-400">❤️</span> for sustainable futures
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
+      
+      .animate-pulse {
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      
+      @keyframes bounce {
+        0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+        50% { transform: translate(-50%, -50%) translateY(-20px); }
+      }
+      
+      .animate-bounce {
+        animation: bounce 3s ease-in-out infinite;
+      }
+    </style>
+  </footer>
+
+  <!-- Mobile menu script -->
+  <script>
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    let menuOpen = false;
+
+    mobileMenuButton.addEventListener('click', () => {
+      const navList = document.querySelector('nav ul');
+      if (!menuOpen) {
+        navList.classList.remove('hidden');
+        navList.classList.add('flex', 'flex-col', 'absolute', 'top-full', 'right-6', 'bg-white', 'shadow-lg', 'rounded-md', 'py-4', 'px-6', 'w-48', 'space-y-4', 'z-50');
+        mobileMenuButton.setAttribute('aria-expanded', 'true');
+        menuOpen = true;
+      } else {
+        navList.classList.add('hidden');
+        navList.classList.remove('flex', 'flex-col', 'absolute', 'top-full', 'right-6', 'bg-white', 'shadow-lg', 'rounded-md', 'py-4', 'px-6', 'w-48', 'space-y-4', 'z-50');
+        mobileMenuButton.setAttribute('aria-expanded', 'false');
+        menuOpen = false;
+      }
+    });
+  </script>
+
+  <script>
+    let allBlogs = [];
+    let allNewsletters = [];
+    let visibleCount = 3;
+    let visibleNewslettersCount = 3;
+    let visibleBlogsCount = 3;
+    let currentMode = 'newsletters'; // Default to newsletters first
+
+    // Load blog posts
+    async function loadBlogPosts() {
+      try {
+        // Load blogs
+        const blogResponse = await fetch('blog.json');
+        allBlogs = await blogResponse.json();
+        
+        // Load newsletters
+        const newsletterResponse = await fetch('newsletter.json');
+        allNewsletters = await newsletterResponse.json();
+
+        displayBlogPosts(currentMode === 'newsletters' ? visibleNewslettersCount : visibleBlogsCount);
+      } catch (error) {
+        console.error('Error loading blog posts:', error);
+        const blogGrid = document.getElementById('blog-grid');
+        blogGrid.innerHTML = '<div class="text-center py-8 text-gray-600 col-span-full"><p>Failed to load blog posts. Please try again later.</p></div>';
+      }
+    }
+
+    function displayBlogPosts(count) {
+      const blogGrid = document.getElementById('blog-grid');
+      blogGrid.innerHTML = '';
+      
+      let itemsToShow;
+      let sourceType;
+      
+      if (currentMode === 'blogs') {
+        itemsToShow = allBlogs.slice(0, count);
+        sourceType = 'Article';
+      } else {
+        itemsToShow = allNewsletters.slice(0, count);
+        sourceType = 'Newsletter';
+      }
+
+      // Show/hide appropriate buttons
+      const showMoreNewslettersBtn = document.getElementById('show-more-newsletters-btn');
+      const showMoreBlogsBtn = document.getElementById('show-more-blogs-btn');
+      
+      if (currentMode === 'newsletters') {
+        showMoreNewslettersBtn.classList.toggle('hidden', allNewsletters.length <= count);
+        showMoreBlogsBtn.classList.add('hidden');
+      } else {
+        showMoreBlogsBtn.classList.toggle('hidden', allBlogs.length <= count);
+        showMoreNewslettersBtn.classList.add('hidden');
+      }
+      
+      itemsToShow.forEach((item, index) => {
+        const blogPost = document.createElement('article');
+        blogPost.className = 'card-animation-stagger group bg-white/80 backdrop-blur-xl border border-white/30 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] hover:border-emerald-200 overflow-hidden flex flex-col';
+        
+        let dateDisplay = item.date;
+        if (typeof dateDisplay === 'string') {
+          const dateParts = dateDisplay.split(' ');
+          if (dateParts.length === 2) {
+            dateDisplay = new Date(dateDisplay).getFullYear();
+          }
+        }
+
+        const sourceColor = currentMode === 'blogs' 
+          ? 'from-emerald-500 to-teal-600 border-emerald-200' 
+          : 'from-green-500 to-emerald-600 border-green-200';
+
+        blogPost.innerHTML = `
+          <div class="relative overflow-hidden aspect-[3/2]">
+            <img src="${item.thumbnail}" alt="${item.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60"></div>
+            <div class="absolute top-4 left-4">
+              <span class="text-xs font-bold bg-white/90 backdrop-blur-sm text-gray-900 px-3 py-1.5 rounded-full shadow-sm">
+                ${sourceType}
+              </span>
+            </div>
+          </div>
+          
+          <div class="p-6 flex flex-col flex-1">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-sm text-gray-500 font-medium">${item.source || `From ${sourceType}`}</span>
+              <span class="text-sm text-gray-500">${dateDisplay}</span>
+            </div>
+            
+            <h3 class="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-green-700 transition-colors">
+              ${item.title}
+            </h3>
+            
+            <p class="text-gray-600 text-sm mb-4 line-clamp-3 flex-1 min-h-[60px] leading-relaxed">
+              ${item.summary || item.excerpt}
+            </p>
+            
+            <div class="mt-auto flex items-center justify-between pt-4 border-t border-gray-100">
+              <span class="text-xs text-gray-400 font-medium tracking-wider uppercase">${item.date}</span>
+              <a href="${item.url || item.link}" target="_blank" rel="noopener" class="text-green-600 hover:text-green-800 font-semibold text-sm flex items-center transition-colors group/link">
+                Read more
+                <svg class="w-4 h-4 ml-1 transform group-hover/link:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </a>
+            </div>
+          </div>
+          
+          <!-- Hover enhancement -->
+          <div class="absolute inset-0 bg-gradient-to-r from-green-600/5 to-emerald-600/5 opacity-0 group-hover:opacity-100 transition-all duration-500 rounded-2xl pointer-events-none"></div>
+        `;
+        
+        blogGrid.appendChild(blogPost);
+      });
+    }
+
+    // Toggle functionality
+    function setupToggles() {
+      const blogToggle = document.getElementById('blog-toggle');
+      const newsletterToggle = document.getElementById('newsletter-toggle');
+
+      blogToggle.addEventListener('click', () => {
+        currentMode = 'blogs';
+        updateToggleStates();
+        displayBlogPosts(visibleBlogsCount);
+      });
+
+      newsletterToggle.addEventListener('click', () => {
+        currentMode = 'newsletters';
+        updateToggleStates();
+        displayBlogPosts(visibleNewslettersCount);
+      });
+    }
+
+    function updateToggleStates() {
+      const blogToggle = document.getElementById('blog-toggle');
+      const newsletterToggle = document.getElementById('newsletter-toggle');
+
+      if (currentMode === 'blogs') {
+        blogToggle.className = 'toggle-btn px-6 py-2 rounded-full font-medium transition-all duration-300 bg-green-600 text-white';
+        newsletterToggle.className = 'toggle-btn px-6 py-2 rounded-full font-medium transition-all duration-300 bg-gray-200 text-gray-700 hover:bg-gray-300';
+      } else {
+        blogToggle.className = 'toggle-btn px-6 py-2 rounded-full font-medium transition-all duration-300 bg-gray-200 text-gray-700 hover:bg-gray-300';
+        newsletterToggle.className = 'toggle-btn px-6 py-2 rounded-full font-medium transition-all duration-300 bg-green-600 text-white';
+      }
+    }
+
+    // Separate button handlers
+    document.getElementById('show-more-newsletters-btn').addEventListener('click', function() {
+      visibleNewslettersCount = allNewsletters.length;
+      displayBlogPosts(visibleNewslettersCount);
+      this.style.display = 'none';
+    });
+
+    document.getElementById('show-more-blogs-btn').addEventListener('click', function() {
+      visibleBlogsCount = allBlogs.length;
+      displayBlogPosts(visibleBlogsCount);
+      this.style.display = 'none';
+    });
+
+    // Load blogs when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      loadBlogPosts();
+      setupToggles();
+      
+      // Newsletter signup functionality
+      const newsletterForm = document.getElementById('newsletter-form');
+      if (newsletterForm) {
+        newsletterForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const email = this.querySelector('input[type="email"]').value;
+          
+          // Simulate signup with visual feedback
+          const button = this.querySelector('button[type="submit"]');
+          const originalText = button.innerHTML;
+          
+          button.innerHTML = '<div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mx-auto"></div>';
+          button.disabled = true;
+          
+          // Simulate API call
+          setTimeout(() => {
+            button.innerHTML = '<svg class="w-5 h-5 text-white mx-auto" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg>';
+            
+            // Add success message
+            const successMsg = document.createElement('p');
+            successMsg.className = 'text-green-600 text-sm font-medium';
+            successMsg.textContent = 'Thank you for subscribing!';
+            this.parentNode.insertBefore(successMsg, this.nextSibling);
+            
+            // Reset form
+            setTimeout(() => {
+              button.innerHTML = originalText;
+              button.disabled = false;
+              this.reset();
+              successMsg.remove();
+            }, 3000);
+          }, 1500);
+        });
+      }
+    });
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', function() {
+      const header = document.getElementById('header');
+      const scrollPosition = window.scrollY;
+      
+      if (scrollPosition > 100) {
+        header.style.backdropFilter = 'blur(10px)';
+        header.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
+        header.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';
+      } else {
+        header.style.backdropFilter = 'none';
+        header.style.backgroundColor = 'transparent';
+        header.style.boxShadow = 'none';
+      }
+    });
+
+    // Initial navbar styling
+    document.addEventListener('DOMContentLoaded', function() {
+      const header = document.getElementById('header');
+      header.style.transition = 'all 0.3s ease';
+    });
+  </script>
+
+  <style>
+    /* Ensure smooth transitions */
+    header {
+      transition: all 0.3s ease !important;
+    }
+  </style>
+</body>
+</html>
+
