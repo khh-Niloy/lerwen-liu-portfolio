@@ -11,79 +11,44 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
-    /* Underline animation on nav links */
+    /* Static styling - no animations */
     .underline-anim::after {
       content: '';
       position: absolute;
       bottom: -2px;
       left: 0;
-      width: 0;
+      width: 100%;
       height: 2px;
       background: #16a34a; /* Tailwind green-600 */
-      transition: width 0.3s ease;
-    }
-    .underline-anim:hover::after,
-    .underline-anim:focus::after {
-      width: 100%;
-    }
-    /* Keyframes for animations */
-    @keyframes fadeInUp {
-      0% { opacity: 0; transform: translateY(25px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeSlideUp {
-      0% { opacity: 0; transform: translateY(20px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-    @keyframes fadeScaleUp {
-      0% { opacity: 0; transform: translateY(30px) scale(0.9); }
-      100% { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    /* Register animation utilities inside Tailwind */
+    /* Static utilities */
     @layer utilities {
       .animate-fade-in {
-        animation: fadeInUp 0.8s forwards;
-        opacity: 0;
+        opacity: 1;
       }
-      .delay-100 { animation-delay: 0.4s; }
-      .delay-300 { animation-delay: 0.3s; }
-      .delay-500 { animation-delay: 0.5s; }
-      .delay-700 { animation-delay: 1.2s; }
+      .delay-100, .delay-300, .delay-500, .delay-700 {
+        animation-delay: 0;
+      }
 
-      .animate-fade-slide-up {
-        animation: fadeSlideUp 5s ease forwards;
-      }
-      .animate-float {
-        animation: float 4s ease-in-out infinite;
-      }
+      .animate-fade-slide-up,
+      .animate-float,
       .animate-fade-scale-up {
-        animation: fadeScaleUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        opacity: 0;
+        animation: none;
+        opacity: 1;
       }
 
-      /* Nav underline animation */
+      /* Nav underline - static */
       nav ul li a {
-        position: relative;
         padding-bottom: 0.25rem; /* 4px */
       }
       nav ul li a::after {
         content: "";
         position: absolute;
-        width: 0;
+        width: 100%;
         height: 2px;
         bottom: 0;
         left: 0;
-        background-color: #166534; /* Tailwind's green-900 */
-        transition: width 0.3s ease-in-out;
-      }
-      nav ul li a:hover::after,
-      nav ul li a:focus::after {
-        width: 100%;
       }
     }
 
@@ -115,12 +80,12 @@
         Lerwen Liu
       </a>
       <ul class="hidden md:flex space-x-8 text-gray-700 font-medium">
-        <li><a href="#home" class="hover:text-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition">Home</a></li>
         <li><a href="#about" class="hover:text-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition">About</a></li>
         <li><a href="#expertise" class="hover:text-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition">Expertise</a></li>
         <li><a href="#projects" class="hover:text-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition">Projects</a></li>
         <li><a href="#blog" class="hover:text-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition">Blog and Newsletter</a></li>
         <li><a href="#publications" class="hover:text-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition">Publications</a></li>
+        <li><a href="#media" class="hover:text-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition">Media</a></li>
         <li><a href="#contact" class="hover:text-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition">Contact</a></li>
       </ul>
       <!-- Mobile menu button -->
@@ -145,8 +110,8 @@
           <!-- Text content -->
           <div class="lg:col-span-7 space-y-8">
             <div class="space-y-6">
-              <div class="inline-flex items-center space-x-2 bg-green-600 bg-opacity-10 rounded-full px-4 py-2 animate-slide-in-left">
-                <span class="w-2 h-2 bg-green-600 rounded-full animate-pulse"></span>
+              <div class="inline-flex items-center space-x-2 bg-green-600 bg-opacity-10 rounded-full px-4 py-2">
+                <span class="w-2 h-2 bg-green-600 rounded-full"></span>
                 <span class="text-sm font-medium text-green-700">Leading Sustainability Innovation</span>
               </div>
               
@@ -638,39 +603,57 @@
     </section>
 
     <!-- Projects Section -->
-    <section id="projects" class="py-20 border-t border-green-200 bg-white">
-      <h2 class="text-3xl font-bold text-green-800 mb-12 text-center">Key Projects & Initiatives</h2>
-      <div class="max-w-6xl mx-auto grid gap-10 px-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        <!-- Project Card 1 -->
-        <article class="bg-green-50 rounded-lg shadow-lg p-6 hover:shadow-xl transition">
-          <h3 class="text-xl font-semibold text-green-900 mb-2">Circular Economy Education Program</h3>
-          <p class="text-gray-700 text-sm mb-4">
-            Designed and led an interdisciplinary curriculum integrating circular economy principles into entrepreneurship education, impacting over 1,000 students globally.
+    <section id="projects" class="py-32 bg-gradient-to-br from-slate-50 via-white to-slate-100 relative overflow-hidden">
+      <!-- Animated background elements -->
+      <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-0 -left-16 w-96 h-96 bg-gradient-to-br from-emerald-400/20 via-green-300/15 to-teal-400/20 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-0 -right-16 w-96 h-96 bg-gradient-to-tl from-teal-400/20 via-emerald-300/15 to-green-300/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div class="absolute top-20 right-1/3 w-64 h-64 bg-gradient-to-r from-purple-300/10 via-pink-300/10 to-rose-300/10 rounded-full blur-2xl animate-float"></div>
+      </div>
+      
+      <div class="relative z-10 max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16">
+          <div class="inline-flex items-center space-x-2 bg-green-100 rounded-full px-4 py-2 mb-6">
+          </div>
+          <h2 class="text-5xl md:text-7xl font-black mb-6 bg-gradient-to-r from-emerald-600 via-green-500 to-teal-600 bg-clip-text text-transparent">
+            Projects & Initiatives
+          </h2>
+          <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            Exploring cutting-edge initiatives that are literally <span class="font-bold text-emerald-600">🌍 transforming the world</span> through sustainable innovation and circular economy
           </p>
-          <a href="https://example.com/circular-education" target="_blank" rel="noopener" class="text-green-700 underline hover:text-green-900 focus:outline-none focus:ring-2 focus:ring-green-500 transition">
-            Learn More
-          </a>
-        </article>
-        <!-- Project Card 2 -->
-        <article class="bg-green-50 rounded-lg shadow-lg p-6 hover:shadow-xl transition">
-          <h3 class="text-xl font-semibold text-green-900 mb-2">Youth Sustainability Leadership Forum</h3>
-          <p class="text-gray-700 text-sm mb-4">
-            Facilitated global youth forums to foster leadership and innovation for sustainable development, collaborating with NGOs and policy makers.
-          </p>
-          <a href="https://example.com/youth-forum" target="_blank" rel="noopener" class="text-green-700 underline hover:text-green-900 focus:outline-none focus:ring-2 focus:ring-green-500 transition">
-            Learn More
-          </a>
-        </article>
-        <!-- Project Card 3 -->
-        <article class="bg-green-50 rounded-lg shadow-lg p-6 hover:shadow-xl transition">
-          <h3 class="text-xl font-semibold text-green-900 mb-2">STEAM Platform Development</h3>
-          <p class="text-gray-700 text-sm mb-4">
-            Spearheaded the development of an online STEAM platform that integrates sustainability tools and resources for educators and entrepreneurs.
-          </p>
-          <a href="https://steam-platform.example.com" target="_blank" rel="noopener" class="text-green-700 underline hover:text-green-900 focus:outline-none focus:ring-2 focus:ring-green-500 transition">
-            Explore Platform
-          </a>
-        </article>
+          <div class="w-32 h-2 mx-auto mt-8 bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 rounded-full"></div>
+        </div>
+
+        <!-- Modern Projects Grid -->
+        <div id="projects-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 px-6">
+          <!-- Projects will be dynamically loaded here -->
+        </div>
+        
+        <!-- Interactive Show More Button -->
+        <div class="text-center mt-16">
+          <button id="show-more-projects-btn" class="group relative bg-gradient-to-r from-emerald-500 via-green-600 to-teal-600 hover:from-emerald-600 hover:via-green-700 hover:to-teal-700 text-white font-bold py-4 px-10 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-emerald-300">
+            <span class="flex items-center">
+             <span class="flex items-center">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8l-8 8-8-8"></path>
+              </svg>
+              Show More Projects
+            </span>
+                
+            </span>
+          </button>
+        </div>
+        
+        <!-- Enhanced Loading Animation -->
+        <div id="projects-loading" class="text-center py-20">
+          <div class="inline-flex space-x-1">
+            <div class="w-3 h-3 bg-emerald-400 rounded-full animate-bounce" style="animation-delay: 0ms"></div>
+            <div class="w-3 h-3 bg-green-400 rounded-full animate-bounce" style="animation-delay: 150ms"></div>
+            <div class="w-3 h-3 bg-teal-400 rounded-full animate-bounce" style="animation-delay: 300ms"></div>
+            <div class="w-3 h-3 bg-purple-400 rounded-full animate-bounce" style="animation-delay: 450ms"></div>
+          </div>
+          <p class="text-lg font-bold text-gray-500 mt-4 animate-pulse">🎯 Loading amazing projects...</p>
+        </div>
       </div>
     </section>
 
@@ -708,7 +691,7 @@
         </div>
 
         <!-- Modern Grid Layout -->
-        <div id="blog-grid" class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8 px-6 items-stretch">
+        <div id="blog-grid" class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 px-6">
           <!-- Loading state will be replaced -->
           <div class="text-center py-8 text-gray-600 col-span-full">
             <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
@@ -741,70 +724,118 @@
 
       <!-- Additional Styles -->
       <style>
-        @keyframes slow-spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        .animate-slow-spin {
-          animation: slow-spin 20s linear infinite;
-        }
-        
-        @keyframes fade-in-up {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fade-in-up {
-          animation: fade-in-up 0.8s ease-out forwards;
-        }
-        
+        /* Static styling - all animations removed */
         .show-more-btn {
-          backdrop-filter: blur(10px);
           border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         .toggle-btn {
-          backdrop-filter: blur(10px);
           border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        /* Staggered card animations */
-        .card-animation-stagger:nth-child(1) { animation-delay: 0.1s; }
-        .card-animation-stagger:nth-child(2) { animation-delay: 0.2s; }
-        .card-animation-stagger:nth-child(3) { animation-delay: 0.3s; }
-        .card-animation-stagger:nth-child(4) { animation-delay: 0.4s; }
+        .card-animation-stagger {
+          animation: none;
+        }
       </style>
     </section>
 
     <!-- Publications Section -->
-    <section id="publications" class="py-20 border-t border-green-200 bg-green-50">
-      <h2 class="text-3xl font-bold text-green-800 mb-12 text-center">Selected Publications</h2>
-      <div class="max-w-4xl mx-auto space-y-8 px-6">
-        <article class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
-          <h3 class="text-xl font-semibold text-green-900 mb-1">“Advancing Circular Economy Practices in Higher Education”</h3>
-          <p class="text-gray-700 text-sm italic mb-2">Journal of Sustainability Education, 2023</p>
-          <p class="text-gray-700 text-sm">
-            This publication explores innovative pedagogical frameworks to integrate circular economy concepts within university curricula.
+    <section id="publications" class="py-32 bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100 relative overflow-hidden">
+      <!-- Animated background -->
+      <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute top-0 -right-16 w-96 h-96 bg-gradient-to-bl from-emerald-300/20 via-green-300/10 to-teal-300/20 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-0 -left-16 w-96 h-96 bg-gradient-to-tr from-green-300/20 via-teal-300/10 to-emerald-300/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div class="absolute top-1/3 left-1/4 w-64 h-64 bg-gradient-to-r from-teal-300/15 via-emerald-300/10 to-green-300/15 rounded-full blur-2xl animate-bounce"></div>
+      </div>
+      
+      <div class="relative z-10 max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-emerald-600 via-green-600 to-teal-600 bg-clip-text text-transparent animate-fade-in-up">
+            Publications & Research
+          </h2>
+          <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            Discover groundbreaking research, insightful books, and influential policy papers shaping the future of sustainable development
           </p>
-          <a href="https://example.com/publication1" target="_blank" rel="noopener" class="text-green-700 underline hover:text-green-900 focus:outline-none focus:ring-2 focus:ring-green-500 transition">
-            Read More
-          </a>
-        </article>
-        <article class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
-          <h3 class="text-xl font-semibold text-green-900 mb-1">“Youth Leadership for Sustainable Development Goals”</h3>
-          <p class="text-gray-700 text-sm italic mb-2">Sustainability Leadership Review, 2022</p>
-          <p class="text-gray-700 text-sm">
-            A study examining the role of youth leadership programs in accelerating progress toward the UN SDGs.
+          <div class="w-32 h-1 mx-auto mt-8 bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 rounded-full"></div>
+        </div>
+
+        <!-- Dynamic Publications Grid -->
+        <div id="publications-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 px-6">
+          <!-- Publications will be dynamically loaded here -->
+        </div>
+        
+        <!-- Show More Button -->
+        <div class="text-center mt-12">
+          <button id="show-more-publications-btn" 
+                  class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-emerald-300">
+           <span class="flex items-center">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8l-8 8-8-8"></path>
+              </svg>
+              Show More Publication
+            </span>
+          </button>
+        </div>
+        
+        <!-- Loading Animation -->
+        <div id="publications-loading" class="text-center py-16">
+          <div class="inline-flex space-x-2">
+            <div class="w-3 h-3 bg-green-400 rounded-full animate-bounce" style="animation-delay: 0ms;"></div>
+            <div class="w-3 h-3 bg-emerald-400 rounded-full animate-bounce" style="animation-delay: 150ms;"></div>
+            <div class="w-3 h-3 bg-teal-400 rounded-full animate-bounce" style="animation-delay: 300ms;"></div>
+          </div>
+          <p class="text-sm font-medium text-gray-400 mt-3 animate-pulse">Loading Publications...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Media Section -->
+    <section id="media" class="py-32 bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100 relative overflow-hidden">
+      <!-- Animated background -->
+      <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute top-0 -left-16 w-96 h-96 bg-gradient-to-br from-green-300/20 via-emerald-300/15 to-teal-300/20 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-0 -right-16 w-96 h-96 bg-gradient-to-tr from-teal-300/20 via-green-300/15 to-emerald-300/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div class="absolute top-1/3 left-1/4 w-64 h-64 bg-gradient-to-r from-emerald-300/15 via-green-300/10 to-teal-300/15 rounded-full blur-2xl animate-bounce"></div>
+      </div>
+      
+      <div class="relative z-10 max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-green-600 via-emerald-500 to-teal-600 bg-clip-text text-transparent animate-fade-in-up">
+            Media & Videos
+          </h2>
+          <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            Explore engaging video content featuring talks, lectures, and insights on circular economy, sustainability, and transformative education
           </p>
-          <a href="https://example.com/publication2" target="_blank" rel="noopener" class="text-green-700 underline hover:text-green-900 focus:outline-none focus:ring-2 focus:ring-green-500 transition">
-            Read More
-          </a>
-        </article>
+          <div class="w-32 h-1 mx-auto mt-8 bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 rounded-full"></div>
+        </div>
+
+        <!-- Media Grid -->
+        <div id="media-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 px-6">
+          <!-- Media content will be dynamically loaded here -->
+        </div>
+        
+        <!-- Show More Button -->
+        <div class="text-center mt-12">
+          <button id="show-more-media-btn" 
+                  class="group relative bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 hover:from-green-600 hover:via-emerald-600 hover:to-teal-600 text-white font-bold py-4 px-10 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-green-300">
+            <span class="flex items-center">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8l-8 8-8-8"></path>
+              </svg>
+              Show More Videos
+            </span>
+          </button>
+        </div>
+        
+        <!-- Loading Animation -->
+        <div id="media-loading" class="text-center py-16">
+          <div class="inline-flex space-x-2">
+            <div class="w-3 h-3 bg-purple-400 rounded-full animate-bounce" style="animation-delay: 0ms;"></div>
+            <div class="w-3 h-3 bg-pink-400 rounded-full animate-bounce" style="animation-delay: 150ms;"></div>
+            <div class="w-3 h-3 bg-indigo-400 rounded-full animate-bounce" style="animation-delay: 300ms;"></div>
+          </div>
+          <p class="text-sm font-medium text-gray-400 mt-3 animate-pulse">Loading Media Content...</p>
+        </div>
       </div>
     </section>
 
@@ -961,6 +992,7 @@
             <li><a href="#projects" class="text-gray-300 hover:text-green-400 transition-colors duration-300 text-sm hover:translate-x-1 transform transition-transform">Projects</a></li>
             <li><a href="#blog" class="text-gray-300 hover:text-green-400 transition-colors duration-300 text-sm hover:translate-x-1 transform transition-transform">Blog & Newsletter</a></li>
             <li><a href="#publications" class="text-gray-300 hover:text-green-400 transition-colors duration-300 text-sm hover:translate-x-1 transform transition-transform">Publications</a></li>
+            <li><a href="#media" class="text-gray-300 hover:text-green-400 transition-colors duration-300 text-sm hover:translate-x-1 transform transition-transform">Media</a></li>
           </ul>
         </div>
 
@@ -1299,7 +1331,416 @@
     header {
       transition: all 0.3s ease !important;
     }
+    
+    @keyframes fade-in-up {
+      0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    .animate-fade-in-up {
+      animation: fade-in-up 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    
+    .glass-morphism {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      display: box;
+      line-clamp: 2;
+      box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    .line-clamp-3 {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      display: box;
+      line-clamp: 3;
+      box-orient: vertical;
+      overflow: hidden;
+    }
   </style>
+
+  <!-- Dynamic Content Loading Scripts -->
+  <script>
+    class DynamicContent {
+      constructor() {
+        this.allProjects = [];
+        this.allPublications = [];
+        this.allMedia = [];
+        this.visibleProjects = 3;
+        this.visiblePublications = 3;
+        this.visibleMedia = 3;
+        this.projectsExpanded = false;
+        this.publicationsExpanded = false;
+        this.mediaExpanded = false;
+        
+        this.initializeContent();
+      }
+
+      async initializeContent() {
+        await this.loadProjects();
+        await this.loadPublications();
+        await this.loadMedia();
+        this.setupShowMoreButtons();
+      }
+
+      async loadProjects() {
+        const loading = document.getElementById('projects-loading');
+        const container = document.getElementById('projects-container');
+        const showMoreBtn = document.getElementById('show-more-projects-btn');
+
+        try {
+          const response = await fetch('projects.json');
+          this.allProjects = await response.json();
+
+          setTimeout(() => {
+            loading.style.display = 'none';
+            this.renderLimitedProjects();
+            this.updateProjectsCount();
+            showMoreBtn.style.display = this.allProjects.length > this.visibleProjects ? 'inline-block' : 'none';
+          }, 800);
+        } catch (error) {
+          this.showError(container, 'Failed to load projects', 'emerald');
+        }
+      }
+
+      async loadPublications() {
+        const loading = document.getElementById('publications-loading');
+        const container = document.getElementById('publications-container');
+        const showMoreBtn = document.getElementById('show-more-publications-btn');
+
+        try {
+          const response = await fetch('publications.json');
+          this.allPublications = await response.json();
+
+          setTimeout(() => {
+            loading.style.display = 'none';
+            this.renderLimitedPublications();
+            this.updatePublicationsCount();
+            showMoreBtn.style.display = this.allPublications.length > this.visiblePublications ? 'inline-block' : 'none';
+          }, 1200);
+        } catch (error) {
+          this.showError(container, 'Failed to load publications', 'indigo');
+        }
+      }
+
+      renderLimitedProjects() {
+        const container = document.getElementById('projects-container');
+        const projectsToShow = this.allProjects.slice(0, this.visibleProjects);
+        container.innerHTML = projectsToShow.map((project, index) => this.renderProjectCard(project, index)).join('');
+        
+        // Re-trigger animations for newly added cards
+        this.triggerAnimations(container);
+      }
+
+      renderLimitedPublications() {
+        const container = document.getElementById('publications-container');
+        const publicationsToShow = this.allPublications.slice(0, this.visiblePublications);
+        container.innerHTML = publicationsToShow.map((publication, index) => this.renderPublicationCard(publication, index)).join('');
+        
+        // Re-trigger animations for newly added cards
+        this.triggerAnimations(container);
+      }
+
+      renderProjectCard(project, index) {
+        return `
+          <article class="card-animation-stagger group relative bg-white/80 backdrop-blur-xl border border-white/20 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.01] overflow-hidden flex flex-col">
+            <div class="absolute inset-0 bg-gradient-to-br from-emerald-50/10 via-green-100/5 to-teal-50/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            
+            <div class="relative p-5 flex flex-col flex-grow">
+              <!-- Header with title -->
+              <div class="mb-3">
+                <h3 class="text-lg font-bold text-gray-900 line-clamp-2 group-hover:text-emerald-700 transition-colors mb-2"
+                    style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                  ${project.title}
+                </h3>
+                
+                ${project.organization || project.role ? 
+                  `<div class="mb-2">
+                    <span class="text-xs font-medium text-emerald-700 bg-emerald-50 px-2 py-1 rounded-full inline-block max-w-full truncate">
+                      ${project.organization || project.role}
+                    </span>
+                  </div>` : ''
+                }
+              </div>
+              
+              <!-- Description with dynamic height -->
+              <div class="flex-grow mb-3">
+                <p class="text-gray-600 text-sm leading-relaxed line-clamp-3"
+                   style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                  ${project.description}
+                </p>
+              </div>
+              
+              <!-- Footer compact -->
+              <div class="pt-2 border-t border-gray-100 mt-auto">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center text-xs text-gray-500">
+                    <span class="font-medium">${project.date || project.period}</span>
+                  </div>
+                  
+                  ${project.url ? 
+                    `<a href="${project.url}" target="_blank" rel="noopener" 
+                       class="text-emerald-600 hover:text-emerald-800 text-xs font-medium group/link flex items-center">
+                      <span>View</span>
+                      <svg class="w-3 h-3 ml-1 group-hover/link:translate-x-0.5 transition-transform"
+                           fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17l9.5-9.5M17 17V7H7"/>
+                      </svg>
+                    </a>` : 
+                    `<span class="text-xs text-gray-400">${project.role}</span>`
+                  }
+                </div>
+              </div>
+            </div>
+          </article>
+        `;
+      }
+
+      renderPublicationCard(publication, index) {
+        return `
+          <article class="card-animation-stagger group relative bg-white/80 backdrop-blur-xl border border-white/20 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] hover:border-green-200/50 overflow-hidden flex flex-col">
+            <div class="absolute inset-0 bg-gradient-to-bl from-green-50/20 via-emerald-100/10 to-teal-50/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            
+            <div class="relative p-6 flex flex-col flex-grow">
+              <!-- Title -->
+              <div class="mb-3">
+                <h3 class="text-lg font-bold text-gray-900 line-clamp-3 group-hover:text-green-700 transition-colors"
+                    style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                  ${publication.title}
+                </h3>
+              </div>
+              
+              <!-- Type -->
+              <div class="mb-2">
+                <span class="text-xs font-medium bg-green-100 text-green-800 px-2 py-1.5 rounded-full inline-block max-w-full truncate">
+                  ${publication.type}
+                </span>
+              </div>
+              
+              <!-- Publisher -->
+              <div class="mb-2">
+                <p class="text-sm font-semibold text-gray-700">${publication.publisher}</p>
+                <p class="text-xs font-medium text-gray-600">${publication.role}</p>
+              </div>
+              
+              <!-- Date -->
+              <div class="mt-auto">
+                <p class="text-sm text-gray-600">
+                  <span class="font-medium">${publication.date}</span>
+                </p>
+              </div>
+            </div>
+            
+            <!-- Hover enhancement -->
+            <div class="absolute top-0 left-0 w-32 h-32 bg-gradient-to-tr from-emerald-400/10 to-transparent rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          </article>
+        `;
+      }
+
+      showAllProjects() {
+        const container = document.getElementById('projects-container');
+        this.visibleProjects = this.allProjects.length;
+        container.innerHTML = this.allProjects.map((project, index) => this.renderProjectCard(project, index)).join('');
+        
+        // Hide the show more button and update state
+        this.projectsExpanded = true;
+        document.getElementById('show-more-projects-btn').style.display = 'none';
+        
+        // Re-trigger animations
+        this.triggerAnimations(container);
+      }
+
+      showAllPublications() {
+        const container = document.getElementById('publications-container');
+        this.visiblePublications = this.allPublications.length;
+        container.innerHTML = this.allPublications.map((publication, index) => this.renderPublicationCard(publication, index)).join('');
+        
+        // Hide the show more button and update state
+        this.publicationsExpanded = true;
+        document.getElementById('show-more-publications-btn').style.display = 'none';
+        
+        // Re-trigger animations
+        this.triggerAnimations(container);
+      }
+
+      async loadMedia() {
+        const loading = document.getElementById('media-loading');
+        const container = document.getElementById('media-container');
+        const showMoreBtn = document.getElementById('show-more-media-btn');
+
+        try {
+          const response = await fetch('media.json');
+          this.allMedia = await response.json();
+
+          setTimeout(() => {
+            loading.style.display = 'none';
+            this.renderLimitedMedia();
+            showMoreBtn.style.display = this.allMedia.length > this.visibleMedia ? 'inline-block' : 'none';
+          }, 800);
+        } catch (error) {
+          this.showError(container, 'Failed to load media content', 'purple');
+        }
+      }
+
+      renderLimitedMedia() {
+        const container = document.getElementById('media-container');
+        const mediaToShow = this.allMedia.slice(0, this.visibleMedia);
+        container.innerHTML = mediaToShow.map((media, index) => this.renderMediaCard(media, index)).join('');
+        
+        // Re-trigger animations for newly added cards
+        this.triggerAnimations(container);
+      }
+
+      showAllMedia() {
+        const container = document.getElementById('media-container');
+        this.visibleMedia = this.allMedia.length;
+        container.innerHTML = this.allMedia.map((media, index) => this.renderMediaCard(media, index)).join('');
+        
+        // Hide the show more button and update state
+        this.mediaExpanded = true;
+        document.getElementById('show-more-media-btn').style.display = 'none';
+        
+        // Re-trigger animations
+        this.triggerAnimations(container);
+      }
+
+      renderMediaCard(media, index) {
+        return `
+          <article class="card-animation-stagger group relative bg-white/80 backdrop-blur-xl border border-white/20 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] hover:border-green-200/50 overflow-hidden flex flex-col h-full">
+            <div class="relative group">
+              <img src="${media.thumbnail}" alt="${media.title}" class="w-full h-48 object-cover transition-transform duration-700 group-hover:scale-110">
+              <div class="absolute inset-0 bg-gradient-to-t from-green-900/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                <div class="text-center">
+                  <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110 shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="relative p-6 flex flex-col flex-grow">
+              <!-- Title -->
+              <div class="mb-3">
+                <h3 class="text-lg font-bold text-gray-900 line-clamp-2 group-hover:text-green-700 transition-colors">
+                  ${media.title}
+                </h3>
+              </div>
+              
+              <!-- Description -->
+              <div class="flex-grow mb-4">
+                <p class="text-gray-600 text-sm leading-relaxed line-clamp-3">
+                  ${media.shortDescription}
+                </p>
+              </div>
+              
+              <!-- Watch Button -->
+              <div class="mt-auto">
+                <a href="${media.link}" target="_blank" rel="noopener" 
+                   class="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white text-center font-semibold py-3 px-4 rounded-lg transition-all duration-300 group-hover:scale-105 flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z"/>
+                  </svg>
+                  Watch Video
+                </a>
+              </div>
+            </div>
+            
+            <!-- Hover enhancement -->
+            <div class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-green-400/10 to-emerald-400/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          </article>
+        `;
+      }
+
+      setupShowMoreButtons() {
+        const projectsBtn = document.getElementById('show-more-projects-btn');
+        const publicationsBtn = document.getElementById('show-more-publications-btn');
+        const mediaBtn = document.getElementById('show-more-media-btn');
+
+        projectsBtn.addEventListener('click', () => {
+          this.showAllProjects();
+        });
+
+        publicationsBtn.addEventListener('click', () => {
+          this.showAllPublications();
+        });
+
+        mediaBtn.addEventListener('click', () => {
+          this.showAllMedia();
+        });
+      }
+
+      updateProjectsCount() {
+        const countElement = document.getElementById('projects-count');
+        if (countElement) {
+          const remaining = this.allProjects.length - this.visibleProjects;
+          countElement.textContent = `(${remaining} more)`;
+        }
+      }
+
+      updatePublicationsCount() {
+        const countElement = document.getElementById('publications-count');
+        if (countElement) {
+          const remaining = this.allPublications.length - this.visiblePublications;
+          countElement.textContent = `(${remaining} more)`;
+        }
+      }
+
+      triggerAnimations(container) {
+        // Trigger staggered animations for newly added cards
+        const cards = container.querySelectorAll('.card-animation-stagger');
+        cards.forEach((card, index) => {
+          card.style.animationDelay = `${index * 0.1}s`;
+        });
+      }
+
+      showError(container, message, color) {
+        const loadingEl = container.parentNode.querySelector('[id$="-loading"]');
+        if (loadingEl) loadingEl.style.display = 'none';
+        container.innerHTML = `
+          <div class="col-span-full text-center py-12">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
+              <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M12 19a2 2 0 100-4 2 2 0 000 4z"/>
+              </svg>
+            </div>
+            <p class="text-gray-600 font-medium">${message}</p>
+            <button onclick="location.reload()" 
+                    class="mt-4 px-4 py-2 bg-red-500 text-white rounded-full text-sm hover:bg-red-600 transition-colors">
+              Retry Loading
+            </button>
+          </div>
+        `;
+      }
+    }
+
+    // Initialize on DOM ready
+    document.addEventListener('DOMContentLoaded', () => {
+      new DynamicContent();
+    });
+  </script>
 </body>
 </html>
 
