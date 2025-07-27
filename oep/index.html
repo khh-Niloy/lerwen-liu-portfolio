@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OEP - Sustainable Startups Map</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            color: #2d3748;
+            overflow-x: hidden;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            animation: gradientShift 10s ease-in-out infinite alternate;
+        }
+        
+        @keyframes gradientShift {
+            0% {
+                filter: hue-rotate(0deg) brightness(1);
+            }
+            50% {
+                filter: hue-rotate(10deg) brightness(1.05);
+            }
+            100% {
+                filter: hue-rotate(-5deg) brightness(0.98);
+            }
+        }
+        
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+                opacity: 0.7;
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+                opacity: 1;
+            }
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            height: 100vh;
+            gap: 0;
+        }
+
+        .map-container {
+            position: relative;
+            background: #f7fafc;
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+
+        .sidebar {
+            background: rgba(102, 126, 234, 0.08);
+            backdrop-filter: blur(25px);
+            border-left: 1px solid rgba(102, 126, 234, 0.2);
+            overflow-y: auto;
+            padding: 2.5rem;
+            border-radius: 24px 0 0 24px;
+            box-shadow: 
+                0 8px 32px rgba(102, 126, 234, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(102, 126, 234, 0.15);
+            animation: slideInRight 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
+        }
+        
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+                filter: blur(10px);
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+                filter: blur(0px);
+            }
+        }
+        
+        .sidebar:hover {
+            box-shadow: 
+                0 12px 40px rgba(102, 126, 234, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #718096;
+            font-size: 1.125rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-filter {
+            margin-bottom: 2rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.875rem 1.25rem;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            font-size: 0.875rem;
+            transition: all 0.4s ease;
+            margin-bottom: 1rem;
+            color: #2d3748;
+            font-weight: 400;
+            box-shadow: 0 4px 16px rgba(72, 187, 120, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: rgba(45, 55, 72, 0.7);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: rgba(102, 126, 234, 0.5);
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 
+                0 0 0 4px rgba(102, 126, 234, 0.2),
+                0 4px 20px rgba(102, 126, 234, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .category-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .category-tag {
+            padding: 0.5rem 0.875rem;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            color: rgba(45, 55, 72, 0.8);
+            box-shadow: 0 2px 8px rgba(72, 187, 120, 0.1);
+        }
+
+        .category-tag.active {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            border-color: rgba(72, 187, 120, 0.5);
+            box-shadow: 0 4px 16px rgba(72, 187, 120, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .category-tag:hover:not(.active) {
+            transform: translateY(-2px) scale(1.05);
+            background: rgba(72, 187, 120, 0.15);
+            box-shadow: 0 4px 16px rgba(72, 187, 120, 0.25);
+            color: #48bb78;
+            border-color: rgba(72, 187, 120, 0.3);
+        }
+
+        .startup-list {
+            space-y: 1rem;
+        }
+
+        .startup-card {
+            background: rgba(72, 187, 120, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(72, 187, 120, 0.2);
+            border-radius: 1.5rem;
+            padding: 1.75rem;
+            margin-bottom: 1.25rem;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 8px 32px rgba(72, 187, 120, 0.15),
+                0 2px 8px rgba(72, 187, 120, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .startup-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 
+                0 20px 40px rgba(72, 187, 120, 0.3),
+                0 6px 20px rgba(56, 161, 105, 0.25);
+            border-color: rgba(72, 187, 120, 0.4);
+            background: rgba(72, 187, 120, 0.12);
+        }
+        
+        .startup-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(72, 187, 120, 0.1) 50%,
+                transparent 70%
+            );
+            transform: rotate(45deg);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+        
+        @keyframes shimmer {
+            0% {
+                transform: rotate(45deg) translateX(-100%);
+            }
+            50% {
+                transform: rotate(45deg) translateX(100%);
+            }
+            100% {
+                transform: rotate(45deg) translateX(-100%);
+            }
+        }
+        
+        .startup-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                135deg,
+                rgba(255, 255, 255, 0.1) 0%,
+                rgba(255, 255, 255, 0.05) 100%
+            );
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .startup-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(31, 38, 135, 0.3);
+            background: rgba(255, 255, 255, 0.18);
+        }
+        
+        .startup-card:hover::before {
+            opacity: 1;
+        }
+
+        .startup-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .startup-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 1rem;
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .startup-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 0.25rem;
+        }
+
+        .startup-country {
+            font-size: 0.875rem;
+            color: #718096;
+        }
+
+        .startup-category {
+            display: inline-block;
+            background: rgba(72, 187, 120, 0.1);
+            color: #2f855a;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .startup-description {
+            font-size: 0.875rem;
+            color: #4a5568;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .startup-internship {
+            background: rgba(72, 187, 120, 0.05);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border-left: 3px solid #48bb78;
+        }
+
+        .startup-internship h4 {
+            color: #2f855a;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .startup-internship p {
+            color: #4a5568;
+            font-size: 0.8125rem;
+            line-height: 1.4;
+        }
+
+        /* Leaflet Map Customization */
+        .leaflet-popup-content-wrapper {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .leaflet-popup-content {
+            margin: 1rem;
+            max-width: 300px;
+        }
+
+        .popup-content {
+            text-align: center;
+        }
+
+        .popup-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .popup-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+
+        .popup-country {
+            color: #718096;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                grid-template-rows: 60vh auto;
+            }
+
+            .sidebar {
+                height: auto;
+                max-height: calc(100vh - 60vh);
+                overflow-y: auto;
+            }
+
+            .title {
+                font-size: 2rem;
+            }
+
+            .sidebar {
+                padding: 1rem;
+            }
+
+            .startup-card {
+                padding: 1rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .fade-in.animate {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.6s ease-out;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            color: #48bb78;
+        }
+
+        .spinner {
+            border: 3px solid rgba(72, 187, 120, 0.3);
+            border-top: 3px solid #48bb78;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-particles">
+        <div class="particle" style="left: 10%; top: 20%; width: 4px; height: 4px; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 20%; top: 80%; width: 6px; height: 6px; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 75%; top: 30%; width: 3px; height: 3px; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 85%; top: 70%; width: 5px; height: 5px; animation-delay: 1s;"></div>
+        <div class="particle" style="left: 15%; top: 50%; width: 4px; height: 4px; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 60%; top: 10%; width: 6px; height: 6px; animation-delay: 5s;"></div>
+    </div>
+    <div class="container">
+        <div class="map-container">
+            <div id="map"></div>
+        </div>
+        
+        <div class="sidebar">
+            <div class="header">
+                <h1 class="title">🌱 Sustainable Startups</h1>
+                <p class="subtitle">Discover eco-innovation across Southeast Asia</p>
+            </div>
+
+            <div class="search-filter">
+                <input type="text" 
+                       id="searchInput" 
+                       placeholder="Search startups..." 
+                       class="search-input"
+                       oninput="filterStartups()">
+                
+                <div class="category-tags" id="categoryFilters">
+                    <span class="category-tag active" data-category="all">All</span>
+                    <span class="category-tag" data-category="Carbon Tech">Carbon</span>
+                    <span class="category-tag" data-category="Green Hydrogen">Hydrogen</span>
+                    <span class="category-tag" data-category="Electric Mobility">Mobility</span>
+                    <span class="category-tag" data-category="Clean Water">Water</span>
+                    <span class="category-tag" data-category="Sustainable Packaging">Packaging</span>
+                    <span class="category-tag" data-category="Food Systems">Food Tech</span>
+                    <span class="category-tag" data-category="AI Waste Management">AI Waste</span>
+                    <span class="category-tag" data-category="Ocean Cleanup">Ocean</span>
+                    <span class="category-tag" data-category="Green Finance">Finance</span>
+                </div>
+            </div>
+
+            <div id="startupList" class="startup-list">
+                <!-- Startups will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    
+    <script>
+        const startups = [
+            {
+                name: "Zuno Carbon",
+                country: "Singapore",
+                description: "AI-powered carbon management platform helping Fortune 500 companies track and reduce emissions.",
+                image: "https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=400&h=300&fit=crop",
+                lat: 1.3521,
+                lng: 103.8198,
+                category: "Carbon Tech",
+                internshipInfo: "S$4,000-6,000/month stipend. Work on enterprise AI models with mentorship from ex-Google climate tech leads."
+            },
+            {
+                name: "Fairatmos",
+                country: "Indonesia",
+                description: "Indonesia's largest carbon-offset marketplace connecting mangrove restoration projects with businesses.",
+                image: "https://images.unsplash.com/photo-1604797625946-3662a1bf8b19?w=400&h=300&fit=crop",
+                lat: -6.1751,
+                lng: 106.8650,
+                category: "Carbon Credits",
+                internshipInfo: "IDR 8-12 million/month stipend. Fieldwork opportunities in coastal restoration sites across Java and Sumatra."
+            },
+            {
+                name: "SunGreenH2",
+                country: "Singapore",
+                description: "Revolutionary electrolyzer technology making green hydrogen production 40% more efficient.",
+                image: "https://images.unsplash.com/photo-1466611653910-0d6c2018f841?w=400&h=300&fit=crop",
+                lat: 1.3521,
+                lng: 103.8198,
+                category: "Green Hydrogen",
+                internshipInfo: "S$3,800-5,500/month stipend. Hands-on research with cutting-edge electrochemistry and publications."
+            },
+            {
+                name: "Oyika",
+                country: "Multi-Country",
+                description: "Asia's leading Battery-as-a-Service network with 300+ e-motorbike swap stations across 3 countries.",
+                image: "https://images.unsplash.com/photo-1558981800-ecbfa84e4829?w=400&h=300&fit=crop",
+                lat: 3.1390,
+                lng: 101.6869,
+                category: "Electric Mobility",
+                internshipInfo: "Multi-country stipend packages. Travel across Singapore, Indonesia, Cambodia optimizing urban mobility solutions."
+            },
+            {
+                name: "EcoWorth Tech",
+                country: "Singapore",
+                description: "Carbon-fiber aerogel filters from recycled paper waste for industrial wastewater treatment, reducing costs by 70%.",
+                image: "https://images.unsplash.com/photo-1519183071298-a29602331a16?w=400&h=300&fit=crop",
+                lat: 1.3521,
+                lng: 103.8198,
+                category: "Clean Water",
+                internshipInfo: "S$3,000-4,500/month stipend. Work with government agencies on water quality testing and policy development."
+            },
+            {
+                name: "Evoware",
+                country: "Indonesia",
+                description: "World's first edible packaging made from seaweed that biodegrades in 30-60 days, serving as marine life food.",
+                image: "https://images.unsplash.com/photo-1622630998477-20aa686adb15?w=400&h=300&fit=crop",
+                lat: -6.2088,
+                lng: 106.8456,
+                category: "Sustainable Packaging",
+                internshipInfo: "IDR 7-10 million/month stipend. Work directly with seaweed farmers in Thousand Islands and global sustainability expos."
+            },
+            {
+                name: "Cleanbodia",
+                country: "Cambodia",
+                description: "Transforming cassava waste into reusable bags, supporting 500+ local farming families with sustainable agriculture waste utilization.",
+                image: "https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=400&h=300&fit=crop",
+                lat: 11.5564,
+                lng: 104.9282,
+                category: "Bioplastics",
+                internshipInfo: "USD 600-900/month stipend. Direct rural community impact work while experiencing authentic Cambodian farming culture."
+            },
+            {
+                name: "TreeDots",
+                country: "Singapore",
+                description: "Asia's first food-waste-to-value platform processing 50 tons monthly, feeding 10,000+ people through surplus food aggregation.",
+                image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop",
+                lat: 1.3521,
+                lng: 103.8198,
+                category: "Food Systems",
+                internshipInfo: "S$2,800-4,200/month stipend. End-to-end food system experience working with Singapore's famous hawker culture."
+            },
+            {
+                name: "Biji-Biji Initiative",
+                country: "Malaysia",
+                description: "Malaysia's creative upcycling movement transforming waste into designer products, reaching 5,000+ students annually.",
+                image: "https://images.unsplash.com/photo-1565538810643-b5bdb714032a?w=400&h=300&fit=crop",
+                lat: 3.1390,
+                lng: 101.6869,
+                category: "Creative Upcycling",
+                internshipInfo: "MYR 1,500-2,500/month stipend. Creative freedom with materials while impacting marginalized artisans and communities."
+            },
+            {
+                name: "The Bamboo Company",
+                country: "Indonesia",
+                description: "Bali's bamboo revolution creating sustainable construction materials and lifestyle products from local plantations.",
+                image: "https://images.unsplash.com/photo-1507150823660-eed1894d7f74?w=400&h=300&fit=crop",
+                lat: -8.3405,
+                lng: 115.0920,
+                category: "Sustainable Materials",
+                internshipInfo: "Covers bamboo bungalow accommodation. Learn sustainable construction from local Bali master builders with cultural immersion."
+            },
+            {
+                name: "Bali Recycle Up",
+                country: "Indonesia",
+                description: "Transforming temple flower waste into sacred incense, partnering with 50+ temples reducing 3 tons of ceremonial waste monthly.",
+                image: "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=400&h=300&fit=crop",
+                lat: -8.4095,
+                lng: 115.1889,
+                category: "Circular Economy",
+                internshipInfo: "Covers homestay accommodation. Deep cultural immersion in Balinese Hindu traditions while creating environmental impact in sacred spaces."
+            },
+            {
+                name: "Circular Blueprint",
+                country: "Indonesia",
+                description: "Upcycling plastic waste into eco-bricks for affordable housing, building 150+ sustainable homes yearly in Jakarta urban areas.",
+                image: "https://images.unsplash.com/photo-1618221118493-9dee1d9fa20f?w=400&h=300&fit=crop",
+                lat: -6.2088,
+                lng: 106.8456,
+                category: "Sustainable Construction",
+                internshipInfo: "IDR 6-8 million/month stipend. Direct social impact through housing solutions while working with local communities and government."
+            },
+            {
+                name: "CarbonGrid",
+                country: "Singapore",
+                description: "Blockchain-based carbon credit trading platform enabling transparent offset verification and real-time impact tracking.",
+                image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop",
+                lat: 1.3521,
+                lng: 103.8198,
+                category: "Blockchain Sustainability",
+                internshipInfo: "S$2,600-4,200/month stipend. Work with cutting-edge Web3 and sustainability technologies for carbon market innovation."
+            },
+            {
+                name: "Energize",
+                country: "Thailand",
+                description: "Building solar-powered microgrids for 200+ off-grid communities across rural Thailand with 24/7 energy access.",
+                image: "https://images.unsplash.com/photo-1466611653910-0d6c2018f841?w=400&h=300&fit=crop",
+                lat: 15.8700,
+                lng: 100.9925,
+                category: "Microgrids",
+                internshipInfo: "THB 15,000-25,000/month stipend. Field work installing and maintaining rural solar systems with direct community impact."
+            },
+            {
+                name: "Mekong Plastic",
+                country: "Vietnam",
+                description: "River plastic collection and upcycling system intercepting 50+ tons of ocean-bound plastic from the Mekong Delta annually.",
+                image: "https://images.unsplash.com/photo-1545553014-16bc2dcea23c?w=400&h=300&fit=crop",
+                lat: 10.8231,
+                lng: 106.6297,
+                category: "Ocean Cleanup",
+                internshipInfo: "VND 8-12 million/month stipend. Hands-on ocean conservation work with coastal communities, learning circular economy principles."
+            },
+            {
+                name: "Urban Oasis",
+                country: "Philippines",
+                description: "Smart roof garden systems for Manila's buildings, producing 50% energy and 30% cooling reduction with hydroponic farming.",
+                image: "https://images.unsplash.com/photo-1559827260-3b7c1a3c7d0d?w=400&h=300&fit=crop",
+                lat: 14.5995,
+                lng: 120.9842,
+                category: "Smart Agriculture",
+                internshipInfo: "₱18,000-₱30,000/month stipend. Urban farming and tech integration work with opportunities for IoT and data analytics."
+            },
+            {
+                name: "WasteXpress",
+                country: "Myanmar",
+                description: "AI-powered waste collection route optimization for Yangon, reducing collection costs by 35% and emissions by 25%.",
+                image: "https://images.unsplash.com/photo-1556740749-5f27f7d2-7b33-4a5d-9a2c-8e8a5d8b1a3c?w=400&h=300&fit=crop",
+                lat: 16.8713,
+                lng: 96.1994,
+                category: "AI Waste Management",
+                internshipInfo: "Cover basic living costs. Develop AI and IoT solutions for urban waste management with real-world deployment experience."
+            },
+            {
+                name: "GreenBridge",
+                country: "Laos",
+                description: "Cross-border sustainable bamboo trade connecting 200+ rural farmers with international markets for eco-products.",
+                image: "https://images.unsplash.com/photo-1545553014-16bc2dcea23c?w=400&h=300&fit=crop",
+                lat: 19.8563,
+                lng: 102.4954,
+                category: "Rural Economy",
+                internshipInfo: "LAK 3-5 million/month stipend. Hands-on work in sustainable supply chains and international trade development across ASEAN."
+            },
+            {
+                name: "BioChain",
+                country: "Malaysia",
+                description: "Blockchain traceability system for palm oil plantations ensuring sustainable practices reach 100+ plantations in West Malaysia.",
+                image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop",
+                lat: 4.2105,
+                lng: 101.9758,
+                category: "Agriculture Transparency",
+                internshipInfo: "MYR 2,000-3,800/month stipend. Work on cutting-edge blockchain technology with the world's largest sustainable palm oil supply chain."
+            },
+            {
+                name: "ReefGuard",
+                country: "Indonesia",
+                description: "AI-powered coral reef monitoring system using underwater drones to map and protect 1000+ sq km of Indonesian reefs.",
+                image: "https://images.unsplash.com/photo-1559827260-3b7c1a3c7d0d?w=400&h=300&fit=crop",
+                lat: -8.3405,
+                lng: 115.0920,
+                category: "Marine Conservation",
+                internshipInfo: "Covers accommodation + certification. Experience marine biology and AI integration while protecting critical coral reef ecosystems."
+            },
+            {
+                name: "Clim8",
+                country: "Thailand",
+                description: "Climate-tech fintech platform connecting impact investors with sustainable businesses across ASEAN, managing $50M+ in green investments.",
+                image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop",
+                lat: 13.7563,
+                lng: 100.5018,
+                category: "Green Finance",
+                internshipInfo: "THB 18,000-35,000/month stipend. Learn sustainable finance and develop climate investment strategies with regional impact."
+            }
+        ];
+
+        let map;
+        let markers = [];
+        let filteredStartups = startups;
+
+        function initMap() {
+            map = L.map('map', {
+                center: [2.5, 108.0],
+                zoom: 5,
+                scrollWheelZoom: true
+            });
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            addMarkers();
+        }
+
+        function addMarkers() {
+            // Clear existing markers
+            markers.forEach(marker => map.removeLayer(marker));
+            markers = [];
+
+            // Add anime.js entrance animation delay
+            filteredStartups.forEach((startup, index) => {
+                setTimeout(() => {
+                    const marker = L.marker([startup.lat, startup.lng])
+                        .addTo(map)
+                        .bindPopup(createPopupContent(startup));
+                    
+                    markers.push(marker);
+
+                    // Animate marker creation
+                    const markerElement = marker._icon;
+                    if (markerElement) {
+                        markerElement.style.opacity = '0';
+                        markerElement.style.transform = 'scale(0.1)';
+                        
+                        anime({
+                            targets: markerElement,
+                            opacity: 1,
+                            scale: 1,
+                            duration: 800,
+                            delay: index * 100,
+                            easing: 'easeOutElastic'
+                        });
+                    }
+                }, 50); // Minimal delay for smooth loading
+            });
+        }
+
+        function createPopupContent(startup) {
+            return `
+                <div class="popup-content">
+                    <img src="${startup.image}" alt="${startup.name}" class="popup-image">
+                    <h3 class="popup-title">${startup.name}</h3>
+                    <p class="popup-country">${startup.country} • ${startup.category}</p>
+                    <p style="font-size: 0.875rem; color: #4a5568; margin-bottom: 1rem;">${startup.description}</p>
+                    <div style="background: rgba(72, 187, 120, 0.1); padding: 0.75rem; border-radius: 0.5rem; margin-top: 1rem;">
+                        <strong style="color: #2f855a; font-size: 0.875rem;">Internship Opportunity:</strong>
+                        <p style="font-size: 0.8125rem; color: #4a5568; margin: 0.25rem 0 0 0;">${startup.internshipInfo}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderStartupList() {
+            const listContainer = document.getElementById('startupList');
+            listContainer.innerHTML = '';
+
+            filteredStartups.forEach((startup, index) => {
+                const card = document.createElement('div');
+                card.className = 'startup-card fade-in';
+                card.onclick = () => {
+                    map.setView([startup.lat, startup.lng], 10);
+                    markers[index]?.openPopup();
+                };
+
+                card.innerHTML = `
+                    <div class="startup-header">
+                        <div class="startup-logo">
+                            ${startup.name.substring(0, 2).toUpperCase()}
+                        </div>
+                        <div>
+                            <div class="startup-name">${startup.name}</div>
+                            <div class="startup-country">🇨🇳 ${startup.country}</div>
+                        </div>
+                    </div>
+                    <span class="startup-category">${startup.category}</span>
+                    <p class="startup-description">${startup.description}</p>
+                    <div class="startup-internship">
+                        <h4>💼 Internship Opportunity</h4>
+                        <p>${startup.internshipInfo}</p>
+                    </div>
+                `;
+
+                listContainer.appendChild(card);
+
+                // Animate entrance
+                setTimeout(() => {
+                    card.classList.add('animate');
+                }, index * 100);
+            });
+        }
+
+        function filterStartups() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const selectedCategory = document.querySelector('.category-tag.active').dataset.category;
+
+            filteredStartups = startups.filter(startup => {
+                const matchesSearch = startup.name.toLowerCase().includes(searchTerm) ||
+                                      startup.description.toLowerCase().includes(searchTerm) ||
+                                      startup.category.toLowerCase().includes(searchTerm);
+                
+                const matchesCategory = selectedCategory === 'all' || startup.category === selectedCategory;
+                
+                return matchesSearch && matchesCategory;
+            });
+
+            addMarkers();
+            renderStartupList();
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            initMap();
+            renderStartupList();
+
+            // Category filter listeners
+            document.querySelectorAll('.category-tag').forEach(tag => {
+                tag.addEventListener('click', (e) => {
+                    document.querySelectorAll('.category-tag').forEach(t => t.classList.remove('active'));
+                    e.target.classList.add('active');
+                    filterStartups();
+                });
+            });
+
+            // Initial animation for header
+            anime({
+                targets: '.header',
+                translateY: [-20, 0],
+                opacity: [0, 1],
+                duration: 1000,
+                easing: 'easeOutExpo'
+            });
+
+            // Animate sidebar elements
+            anime({
+                targets: '.search-input, .category-tags',
+                scale: [0.9, 1],
+                opacity: [0, 1],
+                delay: anime.stagger(100, {from: 'center'}),
+                duration: 800
+            });
+        });
+    </script>
+</body>
+</html>

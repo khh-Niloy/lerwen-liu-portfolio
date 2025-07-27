@@ -910,7 +910,7 @@
           <div class="absolute -bottom-16 -left-8 w-32 h-32 bg-gradient-to-tr from-teal-200/30 to-emerald-200/30 rounded-full blur-xl"></div>
           
           <div class="relative z-10">
-            <form id="contact-form" action="https://formspree.io/f/mzzvrqyd" method="POST" class="space-y-6">
+            <form id="contact-form" action="https://formspree.io/f/mgebnrlw" method="POST" class="space-y-6">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label for="name" class="block text-gray-700 font-semibold mb-2 text-sm uppercase tracking-wide">Full Name</label>
@@ -1452,68 +1452,6 @@
 
   <!-- Dynamic Content Loading Scripts -->
   <script>
-    // AJAX Form Submission
-    document.addEventListener('DOMContentLoaded', function() {
-      const contactForm = document.getElementById('contact-form');
-      const submitBtn = contactForm.querySelector('button[type="submit"]');
-      
-      // Create toast notification element
-      const toast = document.createElement('div');
-      toast.className = 'fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg transform translate-x-full transition-all duration-300 ease-in-out';
-      toast.style.display = 'none';
-      document.body.appendChild(toast);
-
-      function showToast(message, type = 'success') {
-        toast.textContent = message;
-        toast.className = `fixed bottom-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg transform translate-x-full transition-all duration-300 ease-in-out ${
-          type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
-        }`;
-        
-        toast.style.display = 'block';
-        toast.style.transform = 'translateX(0)';
-        
-        setTimeout(() => {
-          toast.style.transform = 'translateX(100%)';
-          setTimeout(() => toast.style.display = 'none', 300);
-        }, 3000);
-      }
-
-      contactForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const formData = new FormData(this);
-        const originalText = submitBtn.innerHTML;
-        
-        // Show loading
-        submitBtn.innerHTML = '<span class="flex items-center justify-center"><div class="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>Sending...</span>';
-        submitBtn.disabled = true;
-        
-        try {
-          const response = await fetch(this.action, {
-            method: 'POST',
-            body: formData,
-            headers: {
-              'Accept': 'application/json'
-            }
-          });
-          
-          if (response.ok) {
-            showToast('Message sent successfully!');
-            contactForm.reset();
-          } else {
-            const error = await response.json();
-            throw new Error(error.error || 'Failed to send message');
-          }
-        } catch (error) {
-          showToast(error.message || 'Failed to send message. Please try again.', 'error');
-        } finally {
-          // Reset button
-          submitBtn.innerHTML = originalText;
-          submitBtn.disabled = false;
-        }
-      });
-    });
-
     class DynamicContent {
       constructor() {
         this.allProjects = [];
