@@ -7,7 +7,8 @@
   <meta name="keywords" content="Lerwen Liu, Circular Economy, Sustainability, Entrepreneurship, NTU, Academic Portfolio" />
   <meta name="author" content="Dr. Lerwen Liu" />
   <title>Dr. Lerwen Liu - Sustainability Leader & Associate Professor</title>
-  <!-- Tailwind CSS CDN -->
+  <!-- Daisy UI + Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.css" rel="stylesheet" type="text/css" />
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
@@ -73,44 +74,54 @@
 </head>
 <body class="bg-neutral-50 text-gray-800 font-sans leading-relaxed selection:bg-green-300 selection:text-green-900">
 
-  <!-- Fixed Header & Navigation -->
-  <header id="header" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 ease-in-out bg-transparent backdrop-blur-sm">
-    <nav class="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
-      <a href="#home" class="text-green-700 font-bold text-lg sm:text-xl lg:text-2xl hover:text-green-900 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors" aria-label="Home - Dr. Lerwen Liu Portfolio">
-        Lerwen Liu
-      </a>
+  <!-- Daisy UI Navbar -->
+  <header id="header" class="navbar fixed top-0 left-0 w-full z-50 transition-all duration-300 ease-in-out bg-white shadow-sm">
+    <div class="navbar-start">
+      <div class="dropdown">
+        <div tabIndex="0" role="button" class="btn btn-ghost lg:hidden">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </div>
+        <ul tabIndex="0" class="menu menu-sm dropdown-content bg-white rounded-box z-[1] mt-3 w-52 p-2 shadow">
+          <li><a href="#about">About</a></li>
+          <li><a href="#expertise">Expertise</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#blog">Blog & Newsletter</a></li>
+          <li><a href="#publications">Publications</a></li>
+          <li><a href="#media">Media</a></li>
+          <li><a href="/oep/" class="text-emerald-600 font-semibold">OEP</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+     <a href="#home" class="hidden lg:flex btn btn-ghost text-xl text-green-700 hover:text-green-900">Lerwen Liu</a>
+
+      </div>
       
-      <!-- Desktop Navigation -->
-      <ul class="hidden md:flex items-center space-x-4 lg:space-x-6 text-gray-700 font-medium">
-        <li><a href="#about" class="text-sm lg:text-base hover:text-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors">About</a></li>
-        <li><a href="#expertise" class="text-sm lg:text-base hover:text-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors">Expertise</a></li>
-        <li><a href="#projects" class="text-sm lg:text-base hover:text-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors">Projects</a></li>
-        <li><a href="#blog" class="text-sm lg:text-base hover:text-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors">Blog & Newsletter</a></li>
-        <li><a href="#publications" class="text-sm lg:text-base hover:text-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors">Publications</a></li>
-        <li><a href="#media" class="text-sm lg:text-base hover:text-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors">Media</a></li>
-        <li><a href="#contact" class="text-sm lg:text-base hover:text-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors">Contact</a></li>
-      </ul>
-      
-      <!-- Mobile menu button -->
-      <button id="mobile-menu-button" aria-label="Toggle menu" aria-expanded="false" 
-              class="md:hidden p-2 text-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 hover:text-green-900 transition-colors">
-        <svg class="w-6 h-6 sm:w-7 sm:h-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 6h16M4 12h16M4 18h16"></path>
-        </svg>
-      </button>
-    </nav>
+    </div>
     
-    <!-- Mobile Navigation Menu -->
-    <div id="mobile-menu" class="md:hidden fixed top-full left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200 shadow-lg transform transition-transform duration-300 ease-in-out translate-y-full opacity-0">
-      <ul class="flex flex-col p-4 space-y-1">
-        <li><a href="#about" class="block w-full px-4 py-3 text-gray-700 hover:text-green-700 hover:bg-green-50 rounded-lg transition-colors">About</a></li>
-        <li><a href="#expertise" class="block w-full px-4 py-3 text-gray-700 hover:text-green-700 hover:bg-green-50 rounded-lg transition-colors">Expertise</a></li>
-        <li><a href="#projects" class="block w-full px-4 py-3 text-gray-700 hover:text-green-700 hover:bg-green-50 rounded-lg transition-colors">Projects</a></li>
-        <li><a href="#blog" class="block w-full px-4 py-3 text-gray-700 hover:text-green-700 hover:bg-green-50 rounded-lg transition-colors">Blog & Newsletter</a></li>
-        <li><a href="#publications" class="block w-full px-4 py-3 text-gray-700 hover:text-green-700 hover:bg-green-50 rounded-lg transition-colors">Publications</a></li>
-        <li><a href="#media" class="block w-full px-4 py-3 text-gray-700 hover:text-green-700 hover:bg-green-50 rounded-lg transition-colors">Media</a></li>
-        <li><a href="#contact" class="block w-full px-4 py-3 text-gray-700 hover:text-green-700 hover:bg-green-50 rounded-lg transition-colors">Contact</a></li>
+    <div class="navbar-center hidden lg:flex">
+      <ul class="menu menu-horizontal px-1">
+        <li><a href="#about">About</a></li>
+        <li>
+          <details>
+            <summary>Expertise</summary>
+            <ul class="p-2 bg-base-100">
+              <li><a href="#expertise">Areas of Expertise</a></li>
+              <li><a href="#research">Research Focus</a></li>
+            </ul>
+          </details>
+        </li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#blog">Blog & Newsletter</a></li>
+        <li><a href="#publications">Publications</a></li>
+        <li><a href="#media">Media</a></li>
+        <li><a href="/oep/" class="text-emerald-600 font-semibold">OEP</a></li>
+        <li><a href="#contact">Contact</a></li>
       </ul>
+    </div>
+    
+    <div class="navbar-end">
+     <a href="#home" class="btn md:hidden btn-ghost text-xl text-green-700 hover:text-green-900">Lerwen Liu</a>
     </div>
   </header>
 
@@ -1126,52 +1137,46 @@
     </style>
   </footer>
 
-  <!-- Mobile menu script -->
+  <!-- Back to Top Button Script -->
   <script>
-    const mobileMenuButton = document.getElementById('mobile-menu-button');
-    const mobileMenu = document.getElementById('mobile-menu');
-    let menuOpen = false;
+    // Add back-to-top functionality - Simple and clean version
+    document.addEventListener('DOMContentLoaded', () => {
+      // Create back to top button
+      const backToTopBtn = document.createElement('button');
+      backToTopBtn.id = 'back-to-top';
+      backToTopBtn.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>';
+      backToTopBtn.className = 'fixed bottom-8 right-8 bg-gradient-to-r from-green-600 to-emerald-600 text-white w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 opacity-0 invisible z-[990] hover:scale-110 focus:outline-none focus:ring-2 focus:ring-green-500 flex items-center justify-center';
+      document.body.appendChild(backToTopBtn);
 
-    mobileMenuButton.addEventListener('click', () => {
-      if (!menuOpen) {
-        mobileMenu.classList.remove('translate-y-full', 'opacity-0');
-        mobileMenu.classList.add('translate-y-0', 'opacity-100');
-        mobileMenuButton.setAttribute('aria-expanded', 'true');
-        document.body.classList.add('overflow-hidden');
-        menuOpen = true;
-      } else {
-        mobileMenu.classList.remove('translate-y-0', 'opacity-100');
-        mobileMenu.classList.add('translate-y-full', 'opacity-0');
-        mobileMenuButton.setAttribute('aria-expanded', 'false');
-        document.body.classList.remove('overflow-hidden');
-        menuOpen = false;
-      }
-    });
+      // Show/hide back to top button on scroll
+      let isScrolling;
+      window.addEventListener('scroll', () => {
+        clearTimeout(isScrolling);
+        
+        if (window.pageYOffset > 300) {
+          backToTopBtn.style.opacity = '1';
+          backToTopBtn.style.visibility = 'visible';
+        } else {
+          backToTopBtn.style.opacity = '0';
+          backToTopBtn.style.visibility = 'hidden';
+        }
+      }, { passive: true });
 
-    // Close menu when clicking on links
-    document.querySelectorAll('#mobile-menu a').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenu.classList.remove('translate-y-0', 'opacity-100');
-        mobileMenu.classList.add('translate-y-full', 'opacity-0');
-        mobileMenuButton.setAttribute('aria-expanded', 'false');
-        document.body.classList.remove('overflow-hidden');
-        menuOpen = false;
+      // Back to top click handler
+      backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
       });
-    });
 
-    // Close menu when clicking outside
-    document.addEventListener('click', (e) => {
-      if (
-        menuOpen && 
-        !mobileMenu.contains(e.target) && 
-        !mobileMenuButton.contains(e.target)
-      ) {
-        mobileMenu.classList.remove('translate-y-0', 'opacity-100');
-        mobileMenu.classList.add('translate-y-full', 'opacity-0');
-        mobileMenuButton.setAttribute('aria-expanded', 'false');
-        document.body.classList.remove('overflow-hidden');
-        menuOpen = false;
-      }
+      // Add a little bounce animation on click
+      backToTopBtn.addEventListener('click', () => {
+        backToTopBtn.style.transform = 'scale(0.9)';
+        setTimeout(() => {
+          backToTopBtn.style.transform = 'scale(1)';
+        }, 150);
+      });
     });
   </script>
 
