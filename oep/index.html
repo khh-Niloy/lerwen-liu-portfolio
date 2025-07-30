@@ -199,7 +199,7 @@
 
         .startup-list {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(1, 1fr);
             gap: 1rem;
             padding: 0.5rem;
         }
@@ -227,40 +227,6 @@
                 0 6px 20px rgba(56, 161, 105, 0.25);
             border-color: rgba(72, 187, 120, 0.4);
             background: rgba(72, 187, 120, 0.12);
-        }
-        
-        .startup-card::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                45deg,
-                transparent 30%,
-                rgba(72, 187, 120, 0.1) 50%,
-                transparent 70%
-            );
-            transform: rotate(45deg);
-            animation: shimmer 3s ease-in-out infinite;
-        }
-        
-        .startup-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(
-                135deg,
-                rgba(255, 255, 255, 0.1) 0%,
-                rgba(255, 255, 255, 0.05) 100%
-            );
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
         }
 
         .startup-card:hover {
@@ -649,8 +615,7 @@
                 <i class="fas fa-home"></i>
                 <span style="font-size: 0.75rem; margin-top: 0.25rem; display: block;">Home</span>
             </button>
-                
-
+            
             <div class="sidebar">
                 <button class="close-btn" onclick="toggleSidebar()">
                     <i class="fas fa-times"></i>
@@ -684,9 +649,20 @@
                 </div>
             </div>
 
-            <div id="startupList" class="startup-list">
-                <!-- Startups will be populated here -->
+            <div id="api-startups-card" style="margin-bottom: 2rem;">
+                <h3 style="color: #48bb78; margin-bottom: 1rem; font-size: 1.25rem; font-weight: 600;">API Startups</h3>
+                <div id="api-startup-list" class="startup-list">
+                </div>
             </div>
+
+            <!-- <div id="internship-companies">
+                <h3 style="color: #48bb78; margin-bottom: 1rem; font-size: 1.25rem; font-weight: 600;">Open for Internships</h3>
+                <div class="startup-list" id="api-company-list">
+                </div>
+            </div> -->
+
+            <!-- <div id="startupList" class="startup-list" style="margin-top: 2rem;">
+            </div> -->
         </div></div>
     </div>
 
@@ -702,384 +678,101 @@
 
         async function fetchStartupData() {
             try {
-                const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTC46rg0fsZkDuWr1HpieQYsnwIBm0ifFdaFK5PtIvyxrf1vMGHuGJ2aibQXMBLlY_FXpWATaNyGR06/pub?gid=2008427106&single=true&output=csv');
-                const csvText = await response.text();
+                console.log('🚀 Fetching data from Google Apps Script...');
                 
-                console.log('CSV Data received:');
-                console.log('Total CSV length:', csvText.length);
+                // Use the exact user-provided endpoint
+                const response = await fetch('https://script.google.com/macros/s/AKfycbwRr6cZpNTK93g9BjBeLUv2rkWbT8js4BzPrdg_IcLT1_hMT47Q6HQCgOf2dWoePcZ5/exec');
                 
-                return parseCSV(csvText);
-            } catch (error) {
-                console.error('Error fetching from Google Sheets:', error);
-                return getFullStartupData();
-            }
-        }
-
-        function parseCSV(csvText) {
-            if (!csvText.trim()) {
-                console.error('Empty CSV response');
-                return getFullStartupData();
-            }
-            
-            // Complete company data from your Excel file
-            const allCompanies = [
-                {
-                    name: "Fling Asia",
-                    country: "Thailand",
-                    description: "Supply-chain SaaS & AI: digital twins, drone inventory, generative AI stock-checking.",
-                    image: "https://images.unsplash.com/photo-1558618666-f7a77cc6986d?w=400&h=300&fit=crop",
-                    lat: 13.7563,
-                    lng: 100.5018,
-                    category: "Supply Chain SaaS",
-                    internshipInfo: "6-month Software Engineer / Business Development roles. Contact: mcurrie@fling.asia",
-                    website: "https://fling.solutions",
-                    linkedin: "https://www.linkedin.com/company/fling-intelligent-solutions/"
-                },
-                {
-                    name: "Muu",
-                    country: "Thailand",
-                    description: "Animal-free dairy via precision fermentation—milk, cheese, yogurt, ice cream.",
-                    image: "https://images.unsplash.com/photo-1558618666-f7a77cc6986d?w=400&h=300&fit=crop",
-                    lat: 13.7563,
-                    lng: 100.5018,
-                    category: "Food Tech",
-                    internshipInfo: "6-month biochemical engineering internship (unpaid). Contact: chanapol.t@regene.bio",
-                    website: "https://www.drinkmuu.com",
-                    linkedin: "https://www.linkedin.com/company/drinkmuu/"
-                },
-                {
-                    name: "Blue Oak",
-                    country: "Thailand",
-                    description: "Digital healthcare IoT: floor-vibration fall detection, gait-analysis AI.",
-                    image: "https://images.unsplash.com/photo-1611532836944-c9f6fa6f1d6c?w=400&h=300&fit=crop",
-                    lat: 13.7563,
-                    lng: 100.5018,
-                    category: "Digital Health",
-                    internshipInfo: "Mechanical engineering roles available. Contact: pat@blueoaksolution.com",
-                    website: "https://www.blueoaksolution.com",
-                    linkedin: "https://www.linkedin.com/company/blueoakdeerlijk/"
-                },
-                {
-                    name: "Whatnot Studio",
-                    country: "Thailand",
-                    description: "Startup studio offering ops consulting, GTM strategy & international expansion.",
-                    image: "https://images.unsplash.com/photo-1611532836944-c9f6fa6f1d6c?w=400&h=300&fit=crop",
-                    lat: 13.7563,
-                    lng: 100.5018,
-                    category: "Startup Studio",
-                    internshipInfo: "Jul-Dec 2025 AI Engineer & Marketing roles, 6 months. Contact: justas@whatnot.co",
-                    website: "https://whatnot.co",
-                    linkedin: "https://www.linkedin.com/company/whatnot-startup-studio/"
-                },
-                {
-                    name: "Aerocosmic",
-                    country: "Thailand",
-                    description: "Electric aviation: 19-seat eVTOLs, hydrogen fuel cells, autonomous flight control.",
-                    image: "https://images.unsplash.com/photo-1559068014-7fb2e58f0f07?w=400&h=300&fit=crop",
-                    lat: 13.7563,
-                    lng: 100.5018,
-                    category: "Electric Aviation",
-                    internshipInfo: "6-month internship, aviation/aerospace engineering. Contact: hr@aerocosmic.co.th",
-                    linkedin: "https://www.linkedin.com/company/aerocosmic/"
-                },
-                {
-                    name: "Coconut Tech",
-                    country: "Thailand",
-                    description: "Recyclable coconut-based plastic alternative.",
-                    image: "https://images.unsplash.com/photo-1558618666-f7a77cc6986d?w=400&h=300&fit=crop",
-                    lat: 13.7563,
-                    lng: 100.5018,
-                    category: "Sustainable Materials",
-                    internshipInfo: "6-month materials science / marketing internship. Contact: contact@coconut.tech"
-                },
-                {
-                    name: "Energreen",
-                    country: "Thailand",
-                    description: "AI-driven industrial energy optimization using solar + storage predictive analytics.",
-                    image: "https://images.unsplash.com/photo-1466611653911-95081537e5b4?w=400&h=300&fit=crop",
-                    lat: 13.7563,
-                    lng: 100.5018,
-                    category: "Clean Energy AI",
-                    internshipInfo: "3-6 month AI/ML & energy management roles. Contact: careers@energreen.ai"
-                },
-                {
-                    name: "EcoSpheres",
-                    country: "Malaysia",
-                    description: "Smart greenhouses with IoT sensors, AI climate control, vertical farming.",
-                    image: "https://images.unsplash.com/photo-1466692476766-db2824bd13ef?w=400&h=300&fit=crop",
-                    lat: 3.1390,
-                    lng: 101.6869,
-                    category: "Smart Agriculture",
-                    internshipInfo: "6-month agtech & IoT engineering roles. Contact: internships@ecospheres.my"
-                },
-                {
-                    name: "GreenFins",
-                    country: "Indonesia",
-                    description: "Blockchain-enabled ocean plastic cleanup & traceable recycling.",
-                    image: "https://images.unsplash.com/photo-1441974231531-cf7ff6005b28?w=400&h=300&fit=crop",
-                    lat: -6.2088,
-                    lng: 106.8456,
-                    category: "Ocean Cleanup",
-                    internshipInfo: "3-6 month blockchain & sustainability roles. Contact: hello@greenfins.id"
-                },
-                {
-                    name: "WasteLedger",
-                    country: "Singapore",
-                    description: "AI waste analytics platform for circular economy insights.",
-                    image: "https://images.unsplash.com/photo-1558618666-f7a77cc6986d?w=400&h=300&fit=crop",
-                    lat: 1.3521,
-                    lng: 103.8198,
-                    category: "AI Waste Management",
-                    internshipInfo: "6-month data science / product roles. Contact: careers@wasteledger.sg"
-                },
-                {
-                    name: "SolarTrack",
-                    country: "Vietnam",
-                    description: "Solar panel AI monitoring for predictive maintenance & optimization.",
-                    image: "https://images.unsplash.com/photo-1516616370751-86d6bd8b0654?w=400&h=300&fit=crop",
-                    lat: 10.8231,
-                    lng: 106.6297,
-                    category: "Solar AI",
-                    internshipInfo: "3-6 month AI/computer vision roles. Contact: team@solartrack.vn"
-                },
-                {
-                    name: "WaterPure",
-                    country: "Philippines",
-                    description: "Mobile atmospheric water generators with graphene filtration & solar power.",
-                    image: "https://images.unsplash.com/photo-1441974231531-cf7ff6005b28?w=400&h=300&fit=crop",
-                    lat: 14.5995,
-                    lng: 120.9842,
-                    category: "Clean Water Tech",
-                    internshipInfo: "6-month engineering / business development roles. Contact: careers@waterpure.ph"
-                },
-                {
-                    name: "CarbonTech Solutions",
-                    country: "Singapore",
-                    description: "Direct air capture technology with modular carbon removal systems.",
-                    image: "https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=400&h=300&fit=crop",
-                    lat: 1.3521,
-                    lng: 103.8198,
-                    category: "Carbon Capture",
-                    internshipInfo: "6-month chemical engineering / process engineering. Contact: jobs@carbontech.sg"
-                },
-                {
-                    name: "HydroGen Asia",
-                    country: "South Korea",
-                    description: "Green hydrogen production via electrolysis & fuel cell systems.",
-                    image: "https://images.unsplash.com/photo-1466611653911-95081537e5b4?w=400&h=300&fit=crop",
-                    lat: 37.5665,
-                    lng: 126.9780,
-                    category: "Green Hydrogen",
-                    internshipInfo: "3-6 month hydrogen systems engineering. Contact: hr@hydrogenasia.kr"
-                },
-                {
-                    name: "EcoMiles",
-                    country: "Thailand",
-                    description: "Sustainable last-mile delivery using electric vehicles & route optimization.",
-                    image: "https://images.unsplash.com/photo-1559068014-7fb2e58f0f07?w=400&h=300&fit=crop",
-                    lat: 13.7563,
-                    lng: 100.5018,
-                    category: "Electric Mobility",
-                    internshipInfo: "3-6 month logistics & software roles. Contact: careers@ecomiles.co.th"
-                },
-                {
-                    name: "BioLoop",
-                    country: "Singapore",
-                    description: "Edible packaging from agro-waste using microbial fermentation.",
-                    image: "https://images.unsplash.com/photo-1558618666-f7a77cc6986d?w=400&h=300&fit=crop",
-                    lat: 1.3521,
-                    lng: 103.8198,
-                    category: "Sustainable Packaging",
-                    internshipInfo: "6-month materials science / food tech roles. Contact: hello@bioloop.sg"
-                },
-                {
-                    name: "SunSmart",
-                    country: "Vietnam",
-                    description: "Decentralized solar microgrids for rural electrification.",
-                    image: "https://images.unsplash.com/photo-1516616370751-86d6bd8b0654?w=400&h=300&fit=crop",
-                    lat: 10.8231,
-                    lng: 106.6297,
-                    category: "Solar Microgrids",
-                    internshipInfo: "6-month renewable energy engineering. Contact: info@sunsmart.vn"
-                },
-                {
-                    name: "CarbonChain",
-                    country: "Japan",
-                    description: "Blockchain carbon credit trading platform for enterprises.",
-                    image: "https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=400&h=300&fit=crop",
-                    lat: 35.6762,
-                    lng: 139.6503,
-                    category: "Green Finance",
-                    internshipInfo: "6-month blockchain / fintech roles. Contact: internships@carbonchain.jp"
-                },
-                {
-                    name: "Aquaponics Plus",
-                    country: "Malaysia",
-                    description: "Urban vertical aquaponics systems with AI nutrient management.",
-                    image: "https://images.unsplash.com/photo-1574482620811-5aa9b9111aa3?w=400&h=300&fit=crop",
-                    lat: 3.1390,
-                    lng: 101.6869,
-                    category: "Aquaponics",
-                    internshipInfo: "3-6 month agricultural tech roles. Contact: careers@aquaponicsplus.my"
-                },
-                {
-                    name: "WindForce",
-                    country: "Indonesia",
-                    description: "Small-scale wind turbines for remote islands & rural communities.",
-                    image: "https://images.unsplash.com/photo-1466611653911-95081537e5b4?w=400&h=300&fit=crop",
-                    lat: -6.2088,
-                    lng: 106.8456,
-                    category: "Wind Energy",
-                    internshipInfo: "6-month renewable energy engineering. Contact: recruitment@windforce.id"
-                },
-                {
-                    name: "EcoTrack",
-                    country: "Australia",
-                    description: "AI carbon footprint tracking & ESG reporting for SMEs.",
-                    image: "https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=400&h=300&fit=crop",
-                    lat: -33.8688,
-                    lng: 151.2093,
-                    category: "ESG Analytics",
-                    internshipInfo: "3-6 month software engineering roles. Contact: team@ecotrack.com.au"
-                },
-                {
-                    name: "RechargeHub",
-                    country: "Philippines",
-                    description: "EV charging network with battery swapping stations.",
-                    image: "https://images.unsplash.com/photo-1593941707882-a56cbd29b357?w=400&h=300&fit=crop",
-                    lat: 14.5995,
-                    lng: 120.9842,
-                    category: "EV Infrastructure",
-                    internshipInfo: "6-month electrical engineering / business roles. Contact: jobs@rechargehub.ph"
-                },
-                {
-                    name: "Waste2Fuel",
-                    country: "Thailand",
-                    description: "Plastics-to-fuel conversion using pyrolysis technology.",
-                    image: "https://images.unsplash.com/photo-1558618666-f7a77cc6986d?w=400&h=300&fit=crop",
-                    lat: 13.7563,
-                    lng: 100.5018,
-                    category: "Waste-to-Energy",
-                    internshipInfo: "6-month chemical engineering roles. Contact: info@waste2fuel.co.th"
-                },
-                {
-                    name: "OceanHealth",
-                    country: "Indonesia",
-                    description: "AI coral reef monitoring with underwater robotics.",
-                    image: "https://images.unsplash.com/photo-1441974231531-cf7ff6005b28?w=400&h=300&fit=crop",
-                    lat: -8.4095,
-                    lng: 115.1889,
-                    category: "Ocean Conservation",
-                    internshipInfo: "6-month marine biology & AI roles. Contact: hr@oceanhealth.co.id"
-                },
-                {
-                    name: "GreenFinTech",
-                    country: "Singapore",
-                    description: "Sustainable investment platform with AI portfolio analysis.",
-                    image: "https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=400&h=300&fit=crop",
-                    lat: 1.3521,
-                    lng: 103.8198,
-                    category: "Green Finance",
-                    internshipInfo: "3-6 month fintech & sustainability roles. Contact: careers@greenfintech.sg"
-                },
-                {
-                    name: "ClimateGuard",
-                    country: "Malaysia",
-                    description: "Climate risk analytics platform for agriculture insurance.",
-                    image: "https://images.unsplash.com/photo-1441974231531-cf7ff6005b28?w=400&h=300&fit=crop",
-                    lat: 3.1390,
-                    lng: 101.6869,
-                    category: "Climate Tech",
-                    internshipInfo: "6-month data science & insurance roles. Contact: info@climateguard.my"
-                },
-                {
-                    name: "SmartBuild",
-                    country: "Vietnam",
-                    description: "Green building materials using agro-waste with AI energy optimization.",
-                    image: "https://images.unsplash.com/photo-1441974231531-cf7ff6005b28?w=400&h=300&fit=crop",
-                    lat: 10.8231,
-                    lng: 106.6297,
-                    category: "Sustainable Building",
-                    internshipInfo: "3-6 month civil engineering / AI roles. Contact: careers@smartbuild.vn"
-                },
-                {
-                    name: "AgroAI",
-                    country: "Australia",
-                    description: "AI crop disease detection using computer vision & satellite imagery.",
-                    image: "https://images.unsplash.com/photo-1466692476766-db2824bd13ef?w=400&h=300&fit=crop",
-                    lat: -35.2809,
-                    lng: 149.1300,
-                    category: "AgTech AI",
-                    internshipInfo: "3-6 month computer vision roles. Contact: team@agroai.com.au"
-                },
-                {
-                    name: "PulseWater",
-                    country: "South Korea",
-                    description: "Real-time water quality monitoring using IoT biosensors.",
-                    image: "https://images.unsplash.com/photo-1441974231531-cf7ff6005b28?w=400&h=300&fit=crop",
-                    lat: 37.5665,
-                    lng: 126.9780,
-                    category: "Water Technology",
-                    internshipInfo: "6-month environmental engineering roles. Contact: careers@pulsewater.kr"
-                },
-                {
-                    name: "CircularTech",
-                    country: "Singapore",
-                    description: "AI-driven circular design platform for sustainable product development.",
-                    image: "https://images.unsplash.com/photo-1558618666-f7a77cc6986d?w=400&h=300&fit=crop",
-                    lat: 1.3521,
-                    lng: 103.8198,
-                    category: "AI Circular Economy",
-                    internshipInfo: "6-month software engineering roles. Contact: hello@circular.tech.sg"
+                if (response.redirected) {
+                    console.log('⚠️ API redirected to:', response.url);
                 }
-            ];
-            
-            console.log(`Loaded ${allCompanies.length} companies from Excel data`);
-            return allCompanies;
+                
+                const data = await response.json();
+                
+                // *** EXACT CONSOLE LOGGING OF RAW DATA FROM THE SHEET ***
+                // console.log('%c🔍 RAW DATA FROM GOOGLE SHEETS API:', 'color: #00ff00; font-size: 16px; font-weight: bold;');
+                // console.log('%c==============================', 'color: #00ff00');
+                // console.log('%c📊 Complete raw response object:', data);
+                // console.log('%c📝 Total records found:', data.length || 0);
+                
+                // if (Array.isArray(data)) {
+                //     // Show the exact structure without any modifications
+                //     console.log('%c📋 Exact array structure:', data);
+                //     data.forEach((row, index) => {
+                //         console.log(`%cRow ${index + 1}:`, 'color: #ffff00; font-weight: bold;', row);
+                //         console.log(`  %cType:`, 'color: #cccccc', typeof row);
+                //         console.log(`  %cKeys:`, 'color: #cccccc', Object.keys(row || {}));
+                //         console.log(`  %cValues:`, 'color: #cccccc', Object.values(row || {}));
+                //     });
+                // } else {
+                //     console.log('%c❗ Data is not an array:', 'color: #ff0000', data);
+                //     console.log('%c💡 Converting to array if possible...', 'color: #ffaa00');
+                // }
+                
+                // console.log('%c==============================', 'color: #00ff00');
+                
+                // Return the exact data structure received from Google Sheets
+                // Do NOT parse or modify this data in any way
+                return Array.isArray(data) ? data : [data];
+                
+            } catch (error) {
+                console.error('%c❌ FAILED TO FETCH GOOGLE SHEETS DATA:', 'color: #ff0000; font-size: 14px;');
+                console.error('Error:', error);
+                console.error('URL:', 'https://script.google.com/macros/s/AKfycbwRr6cZpNTK93g9BjBeLUv2rkWbT8js4BzPrdg_IcLT1_hMT47Q6HQCgOf2dWoePcZ5/exec');
+                
+                // Return empty array instead of fallback so you can see Sheet data structure
+                console.log('⚠️ Returning empty array - please check the actual Sheet data');
+                return [];
+            }
         }
 
         async function loadStartups() {
             try {
-                console.log('Loading all 29 startups from Google Sheets...');
                 
                 const startupData = await fetchStartupData();
-                console.log('Loaded', startupData.length, 'startups from Google Sheets');
-                console.log('All companies data:', startupData);
+                console.log('📊 Total Google Sheets companies loaded:', startupData.length);
+                
+                // Display API data in the new card
+                displayAPIDataInSidebar(startupData);
                 
                 if (startupData.length > 0) {
+                    console.log('✅ Google Sheets data loaded successfully!');
                     allStartups = startupData;
                     filteredStartups = [...allStartups];
                     
-                    // Update category filters
-                    updateCategoryFilters();
+                    // Display Google Sheets data structure
+                    // console.group('📋 Google Sheets Data Structure');
+                    // allStartups.forEach((company, index) => {
+                    //     console.log(`--- Google Sheets Entry #${index + 1} ---`);
+                    //     console.log(`Name: ${company.name}`);
+                    //     console.log(`Country: ${company.country}`);
+                    //     console.log(`Category: ${company.category}`);
+                    //     console.log(`Description: ${company.description?.substring(0, 100)}...`);
+                    //     console.log(`Lat: ${company.lat}, Lng: ${company.lng}`);
+                    //     console.log(`Internship: ${company.internshipInfo}`);
+                    //     console.log('');
+                    // });
+                    // console.groupEnd();
                     
-                    // Initialize UI
+                    // console.log('🎯 Google Sheets data ready for display:', allStartups.length);
+                    
+                    // Update UI with Google Sheets data
+                    updateCategoryFilters();
                     addMarkers();
                     renderStartupList();
                     
-                    console.log('Successfully loaded all', allStartups.length, 'companies');
+                    console.log('✨ UI updated with Google Sheets data!');
                 } else {
-                    console.error('No data received from Google Sheets, using complete Excel data');
+                    console.log('⚠️ Google Sheets empty, using sample data...');
                     allStartups = getFullStartupData();
                     filteredStartups = [...allStartups];
-                    
-                    // Log all companies to console for verification
-                    console.log('=== ALL 29 COMPANIES LOADED ===');
-                    allStartups.forEach((company, index) => {
-                        console.log(`${index + 1}. ${company.name} | ${company.country} | ${company.category}`);
-                        console.log(`   Desc: ${company.description.substring(0, 100)}...`);
-                        console.log(`   Internship: ${company.internshipInfo}`);
-                        console.log('---');
-                    });
-                    console.log('================================');
-                    
-                    updateCategoryFilters();
-                    addMarkers();
                     renderStartupList();
                 }
                 
             } catch (error) {
-                console.error('Failed to load startups:', error);
+                console.error('❌ Google Sheets load error:', error);
+                console.log('🔄 Using fallback sample data...');
+                // Use fallback data since Google Sheets may have access restrictions
                 allStartups = getFullStartupData();
                 filteredStartups = [...allStartups];
                 updateCategoryFilters();
@@ -1088,74 +781,131 @@
             }
         }
 
-        function getFullStartupData() {
-            // Return all 29 companies from the parseCSV function
-            return parseCSV("loaded");
+        function displayAPIDataInSidebar(data) {
+            const container = document.getElementById('api-startup-list');
+            
+            if (!data || data.length === 0) {
+                container.innerHTML = '<div class="startup-card"><p>No API data available</p></div>';
+                return;
+            }
+            
+            container.innerHTML = '';
+
+            data.forEach((startup, index) => {
+                const card = document.createElement('div');
+                card.className = 'startup-card fade-in';
+                
+                // Dynamically extract name from any available key
+                const getBestName = (obj) => {
+                    const possibleKeys = ['name', 'Name', 'companyName', 'CompanyName', 'company', 'Organization', 'organization', 'title'];
+                    return possibleKeys.map(key => obj[key]).find(value => value && value.trim()) || 'Unknown';
+                };
+                
+                const name = getBestName(startup);
+                
+                // Create organized content display
+                const createDataRows = (obj) => {
+                    const importantData = {};
+                    
+                    // Extract only meaningful data, skip status fields
+                    const skipPatterns = ['status', 'Status', 'openFor', 'Status:', 'availability', 'hiring'];
+                    
+                    for (const [key, value] of Object.entries(obj)) {
+                        if (value && typeof value === 'string' && !skipPatterns.some(p => key.toLowerCase().includes(p.toLowerCase()))) {
+                            if (value.length > 0 && value !== 'N/A' && value !== 'none') {
+                                // Smart field mapping
+                                let displayKey = key;
+                                const cleanKey = key.toLowerCase();
+                                
+                                if (cleanKey === 'description' || cleanKey.includes('desc')) {
+                                    displayKey = 'About';
+                                } else if (cleanKey === 'category' || cleanKey.includes('type')) {
+                                    displayKey = 'Category';
+                                } else if (cleanKey === 'funding' || cleanKey.includes('fund')) {
+                                    displayKey = 'Funding';
+                                } else if (cleanKey.includes('employee') || cleanKey.includes('team')) {
+                                    displayKey = 'Team Size';
+                                } else if (cleanKey === 'stage' || cleanKey.includes('phase')) {
+                                    displayKey = 'Stage';
+                                } else {
+                                    displayKey = key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1');
+                                }
+                                
+                                importantData[displayKey] = value;
+                            }
+                        }
+                    }
+                    
+                    // Generate clean HTML
+                    const items = [];
+                    const order = ['About', 'Description', 'Category', 'Industry', 'Stage', 'Funding', 'Team Size', 'Founded'];
+                    
+                    for (const key of order) {
+                        if (importantData[key]) {
+                            let val = importantData[key];
+                            if (key === 'About' || key === 'Description') {
+                                val = val.substring(0, 150) + (val.length > 150 ? '...' : '');
+                            }
+                            items.push(`<div style="margin: 0.25rem 0; padding: 0.25rem 0; border-bottom: 1px solid rgba(72,187,120,0.1);"><strong style="color: #2f855a;">${key}:</strong> ${val}</div>`);
+                        }
+                    }
+                    
+                    // Add any remaining important data
+                    for (const [key, value] of Object.entries(importantData)) {
+                        if (!order.includes(key)) {
+                            items.push(`<div style="margin: 0.25rem 0; padding: 0.25rem 0; color: #4a5568;">${value}</div>`);
+                        }
+                    }
+                    
+                    return items.length > 0 ? items.join('') : '<p style="color: #718096; font-size: 0.8rem;">Details available</p>';
+                };
+                
+                // Try to find image
+                const imageKeys = ['image', 'Image', 'logo', 'Logo', 'profileImage', 'Photo', 'photo'];
+                const image = imageKeys.map(key => startup[key]).find(value => value && value.trim()) || 
+                               `https://via.placeholder.com/50x50/48bb78/ffffff?text=${name.charAt(0)}`;
+                
+                // Try to find location
+                const locationKeys = ['country', 'Country', 'location', 'Location', 'city', 'City', 'region', 'Region'];
+                const location = locationKeys.map(key => startup[key]).find(value => value && value.trim()) || 'Unknown';
+                
+                // Clean static layout with enforced readability
+                const locationDisplay = location !== 'Unknown' ? 
+                    `<div style="margin-top: 0.25rem; color: #4a5568; font-weight: 500;">${location}</div>` : '';
+                
+                card.innerHTML = `
+                    <div style="padding: 1.5rem; display: flex; flex-direction: column; min-height: 100%;">
+                        <!-- Company Name -->
+                        <div style="font-size: 1.25rem; font-weight: 700; color: #1f2937; margin-bottom: 0.25rem;">
+                            ${name}
+                        </div>
+                        ${locationDisplay}
+                        
+                        <!-- Clean summary -->
+                        ${createDataRows(startup)}
+                    </div>
+                `;
+                
+                // Add click handler if lat/lng available
+                if (startup.lat && startup.lng) {
+                    card.onclick = () => {
+                        map.setView([startup.lat, startup.lng], 10);
+                        const marker = markers.find(m => 
+                            m.getLatLng().lat === startup.lat && 
+                            m.getLatLng().lng === startup.lng
+                        );
+                        if (marker) marker.openPopup();
+                    };
+                }
+                
+                container.appendChild(card);
+                
+                // Animate entrance
+                setTimeout(() => {
+                    card.classList.add('animate');
+                }, index * 50);
+            });
         }
-
-        // function updateCategoryFilters() {
-        //     const container = document.getElementById('categoryFilters');
-        //     const categories = [...new Set(allStartups.map(s => s.category))].filter(c => c && c.trim());
-            
-        //     // Keep 'All' as first option
-        //     container.innerHTML = '<span class="category-tag active" data-category="all">All</span>';
-            
-        //     categories.forEach(category => {
-        //         const tag = document.createElement('span');
-        //         tag.className = 'category-tag';
-        //         tag.dataset.category = category;
-        //         tag.textContent = category;
-        //         tag.addEventListener('click', (e) => {
-        //             document.querySelectorAll('.category-tag').forEach(t => t.classList.remove('active'));
-        //             e.target.classList.add('active');
-        //             filterStartups();
-        //         });
-        //         container.appendChild(tag);
-        //     });
-        // }
-
-
-        function updateCategoryFilters() {
-    const container = document.getElementById('categoryFilters');
-    const categories = [...new Set(allStartups.map(s => s.category))].filter(c => c && c.trim());
-    
-    // Create the HTML for the tags, starting with "All"
-    let tagsHTML = '<span class="category-tag active" data-category="all">All</span>';
-    
-    // Sort categories alphabetically and add them
-    categories.sort().forEach(category => {
-        // A simple mapping for shorter tag names
-        const shortNames = {
-            "Sustainable Packaging": "Packaging",
-            "Electric Mobility": "Mobility",
-            "Green Hydrogen": "Hydrogen",
-            "AI Waste Management": "AI Waste",
-            "Clean Water": "Water",
-            "Food Systems": "Food Tech",
-            "Ocean Cleanup": "Ocean",
-            "Green Finance": "Finance",
-            "Carbon Tech": "Carbon"
-        };
-        const displayName = shortNames[category] || category;
-        tagsHTML += `<span class="category-tag" data-category="${category}">${displayName}</span>`;
-    });
-    
-    // Set the new tags into the container
-    container.innerHTML = tagsHTML;
-    
-    // IMPORTANT: Add event listeners to ALL the new tags
-    container.querySelectorAll('.category-tag').forEach(tag => {
-        tag.addEventListener('click', (e) => {
-            // First, make all tags inactive
-            container.querySelectorAll('.category-tag').forEach(t => t.classList.remove('active'));
-            // Then, make the clicked tag active
-            e.currentTarget.classList.add('active');
-            // Finally, apply the filter
-            filterStartups();
-        });
-    });
-}
-
 
         function initMap() {
             map = L.map('map', {
@@ -1217,68 +967,6 @@
             `;
         }
 
-        function renderStartupList() {
-            const listContainer = document.getElementById('startupList');
-            listContainer.innerHTML = '';
-
-            filteredStartups.forEach((startup, index) => {
-                const card = document.createElement('div');
-                card.className = 'startup-card fade-in';
-                card.onclick = () => {
-                    map.setView([startup.lat, startup.lng], 10);
-                    markers[index]?.openPopup();
-                };
-
-                card.innerHTML = `
-                    <div class="startup-header">
-                        <div class="startup-logo">
-                            ${startup.name.substring(0, 2).toUpperCase()}
-                        </div>
-                        <div>
-                            <div class="startup-name">${startup.name}</div>
-                            <div class="startup-country">${startup.country}</div>
-                        </div>
-                    </div>
-                    <span class="startup-category">${startup.category}</span>
-                    <p class="startup-description">${startup.description}</p>
-                    <div class="startup-internship">
-                        <h4>💼 Internship Opportunity</h4>
-                        <p>${startup.internshipInfo}</p>
-                    </div>
-                `;
-
-                listContainer.appendChild(card);
-
-                // Animate entrance
-                setTimeout(() => {
-                    card.classList.add('animate');
-                }, index * 100);
-            });
-        }
-
-        function filterStartups() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const selectedCategory = document.querySelector('.category-tag.active').dataset.category;
-
-            // Always work with the full dataset
-            filteredStartups = allStartups.filter(startup => {
-                if (!startup || !startup.name) return false; // Skip invalid entries
-                
-                const matchesSearch = startup.name.toLowerCase().includes(searchTerm) ||
-                                      startup.description.toLowerCase().includes(searchTerm) ||
-                                      startup.category.toLowerCase().includes(searchTerm);
-                
-                const matchesCategory = selectedCategory === 'all' || startup.category === selectedCategory;
-                
-                return matchesSearch && matchesCategory;
-            });
-
-            console.log(`Filtered results: ${filteredStartups.length} companies (filter: ${selectedCategory}, search: "${searchTerm}")`);
-            
-            addMarkers();
-            renderStartupList();
-        }
-
         function toggleSidebar() {
             const sidebar = document.querySelector('.sidebar');
             const overlay = document.querySelector('.overlay');
@@ -1326,35 +1014,6 @@
             }
         });
 
-
-        // Back to top button
-        const backToTopBtn = document.createElement('button');
-        backToTopBtn.id = 'back-to-top';
-        backToTopBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width={2} d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>';
-        backToTopBtn.className = 'fixed bottom-8 right-4 md:right-8 bg-gradient-to-r from-green-600 to-emerald-600 text-white w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 opacity-0 invisible z-50 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 flex items-center justify-center';
-        document.body.appendChild(backToTopBtn);
-
-        // Back to top functionality
-        const showBackToTop = () => {
-            if (window.pageYOffset > 300) {
-                backToTopBtn.classList.remove('opacity-0', 'invisible');
-                backToTopBtn.classList.add('opacity-100', 'visible');
-            } else {
-                backToTopBtn.classList.add('opacity-0', 'invisible');
-                backToTopBtn.classList.remove('opacity-100', 'visible');
-            }
-        };
-
-        backToTopBtn.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-
-        window.addEventListener('scroll', showBackToTop);
-
-        // Event listeners
         document.addEventListener('DOMContentLoaded', () => {
             initMap();
             loadStartups().then(() => {
