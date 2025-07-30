@@ -37,18 +37,6 @@
             animation: gradientShift 10s ease-in-out infinite alternate;
         }
         
-        @keyframes gradientShift {
-            0% {
-                filter: hue-rotate(0deg) brightness(1);
-            }
-            50% {
-                filter: hue-rotate(10deg) brightness(1.05);
-            }
-            100% {
-                filter: hue-rotate(-5deg) brightness(0.98);
-            }
-        }
-        
         .floating-particles {
             position: fixed;
             top: 0;
@@ -80,7 +68,7 @@
 
         .container {
             display: grid;
-            grid-template-columns: 1fr 400px;
+            grid-template-columns: 1fr 600px;
             height: 100vh;
             gap: 0;
             overflow: hidden;
@@ -110,19 +98,6 @@
             animation: slideInRight 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             transition: all 0.3s ease;
             height: 100vh;
-        }
-        
-        @keyframes slideInRight {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-                filter: blur(10px);
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-                filter: blur(0px);
-            }
         }
         
         .sidebar:hover {
@@ -223,7 +198,10 @@
         }
 
         .startup-list {
-            space-y: 1rem;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            padding: 0.5rem;
         }
 
         .startup-card {
@@ -231,8 +209,7 @@
             backdrop-filter: blur(20px);
             border: 1px solid rgba(72, 187, 120, 0.2);
             border-radius: 1.5rem;
-            padding: 1.75rem;
-            margin-bottom: 1.25rem;
+            padding: 1.5rem;
             cursor: pointer;
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 
@@ -240,6 +217,7 @@
                 0 2px 8px rgba(72, 187, 120, 0.1);
             position: relative;
             overflow: hidden;
+            height: 100%;
         }
         
         .startup-card:hover {
@@ -266,18 +244,6 @@
             );
             transform: rotate(45deg);
             animation: shimmer 3s ease-in-out infinite;
-        }
-        
-        @keyframes shimmer {
-            0% {
-                transform: rotate(45deg) translateX(-100%);
-            }
-            50% {
-                transform: rotate(45deg) translateX(100%);
-            }
-            100% {
-                transform: rotate(45deg) translateX(-100%);
-            }
         }
         
         .startup-card::before {
@@ -501,7 +467,7 @@
         @media (min-width: 1025px) {
             .back-home-btn {
                 top: 1.5rem;
-                right: 27rem;
+                right: 40rem;
             }
         }
 
@@ -533,6 +499,10 @@
             .container {
                 grid-template-columns: 1fr;
                 height: 100vh;
+            }
+            
+            .startup-list {
+                grid-template-columns: 1fr;
             }
 
             .map-container {
@@ -631,29 +601,6 @@
             }
         }
 
-        /* Animations */
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        .fade-in.animate {
-            opacity: 1;
-            transform: translateY(0);
-            transition: all 0.6s ease-out;
-        }
-
         /* Loading Animation */
         .loading {
             display: flex;
@@ -748,222 +695,467 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     
     <script>
-        const startups = [
-            {
-                name: "Zuno Carbon",
-                country: "Singapore",
-                description: "AI-powered carbon management platform helping Fortune 500 companies track and reduce emissions.",
-                image: "https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=400&h=300&fit=crop",
-                lat: 1.3521,
-                lng: 103.8198,
-                category: "Carbon Tech",
-                internshipInfo: "S$4,000-6,000/month stipend. Work on enterprise AI models with mentorship from ex-Google climate tech leads."
-            },
-            {
-                name: "Fairatmos",
-                country: "Indonesia",
-                description: "Indonesia's largest carbon-offset marketplace connecting mangrove restoration projects with businesses.",
-                image: "https://images.unsplash.com/photo-1604797625946-3662a1bf8b19?w=400&h=300&fit=crop",
-                lat: -6.1751,
-                lng: 106.8650,
-                category: "Carbon Credits",
-                internshipInfo: "IDR 8-12 million/month stipend. Fieldwork opportunities in coastal restoration sites across Java and Sumatra."
-            },
-            {
-                name: "SunGreenH2",
-                country: "Singapore",
-                description: "Revolutionary electrolyzer technology making green hydrogen production 40% more efficient.",
-                image: "https://images.unsplash.com/photo-1466611653910-0d6c2018f841?w=400&h=300&fit=crop",
-                lat: 1.3521,
-                lng: 103.8198,
-                category: "Green Hydrogen",
-                internshipInfo: "S$3,800-5,500/month stipend. Hands-on research with cutting-edge electrochemistry and publications."
-            },
-            {
-                name: "Oyika",
-                country: "Multi-Country",
-                description: "Asia's leading Battery-as-a-Service network with 300+ e-motorbike swap stations across 3 countries.",
-                image: "https://images.unsplash.com/photo-1558981800-ecbfa84e4829?w=400&h=300&fit=crop",
-                lat: 3.1390,
-                lng: 101.6869,
-                category: "Electric Mobility",
-                internshipInfo: "Multi-country stipend packages. Travel across Singapore, Indonesia, Cambodia optimizing urban mobility solutions."
-            },
-            {
-                name: "EcoWorth Tech",
-                country: "Singapore",
-                description: "Carbon-fiber aerogel filters from recycled paper waste for industrial wastewater treatment, reducing costs by 70%.",
-                image: "https://images.unsplash.com/photo-1519183071298-a29602331a16?w=400&h=300&fit=crop",
-                lat: 1.3521,
-                lng: 103.8198,
-                category: "Clean Water",
-                internshipInfo: "S$3,000-4,500/month stipend. Work with government agencies on water quality testing and policy development."
-            },
-            {
-                name: "Evoware",
-                country: "Indonesia",
-                description: "World's first edible packaging made from seaweed that biodegrades in 30-60 days, serving as marine life food.",
-                image: "https://images.unsplash.com/photo-1622630998477-20aa686adb15?w=400&h=300&fit=crop",
-                lat: -6.2088,
-                lng: 106.8456,
-                category: "Sustainable Packaging",
-                internshipInfo: "IDR 7-10 million/month stipend. Work directly with seaweed farmers in Thousand Islands and global sustainability expos."
-            },
-            {
-                name: "Cleanbodia",
-                country: "Cambodia",
-                description: "Transforming cassava waste into reusable bags, supporting 500+ local farming families with sustainable agriculture waste utilization.",
-                image: "https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=400&h=300&fit=crop",
-                lat: 11.5564,
-                lng: 104.9282,
-                category: "Bioplastics",
-                internshipInfo: "USD 600-900/month stipend. Direct rural community impact work while experiencing authentic Cambodian farming culture."
-            },
-            {
-                name: "TreeDots",
-                country: "Singapore",
-                description: "Asia's first food-waste-to-value platform processing 50 tons monthly, feeding 10,000+ people through surplus food aggregation.",
-                image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop",
-                lat: 1.3521,
-                lng: 103.8198,
-                category: "Food Systems",
-                internshipInfo: "S$2,800-4,200/month stipend. End-to-end food system experience working with Singapore's famous hawker culture."
-            },
-            {
-                name: "Biji-Biji Initiative",
-                country: "Malaysia",
-                description: "Malaysia's creative upcycling movement transforming waste into designer products, reaching 5,000+ students annually.",
-                image: "https://images.unsplash.com/photo-1565538810643-b5bdb714032a?w=400&h=300&fit=crop",
-                lat: 3.1390,
-                lng: 101.6869,
-                category: "Creative Upcycling",
-                internshipInfo: "MYR 1,500-2,500/month stipend. Creative freedom with materials while impacting marginalized artisans and communities."
-            },
-            {
-                name: "The Bamboo Company",
-                country: "Indonesia",
-                description: "Bali's bamboo revolution creating sustainable construction materials and lifestyle products from local plantations.",
-                image: "https://images.unsplash.com/photo-1507150823660-eed1894d7f74?w=400&h=300&fit=crop",
-                lat: -8.3405,
-                lng: 115.0920,
-                category: "Sustainable Materials",
-                internshipInfo: "Covers bamboo bungalow accommodation. Learn sustainable construction from local Bali master builders with cultural immersion."
-            },
-            {
-                name: "Bali Recycle Up",
-                country: "Indonesia",
-                description: "Transforming temple flower waste into sacred incense, partnering with 50+ temples reducing 3 tons of ceremonial waste monthly.",
-                image: "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=400&h=300&fit=crop",
-                lat: -8.4095,
-                lng: 115.1889,
-                category: "Circular Economy",
-                internshipInfo: "Covers homestay accommodation. Deep cultural immersion in Balinese Hindu traditions while creating environmental impact in sacred spaces."
-            },
-            {
-                name: "Circular Blueprint",
-                country: "Indonesia",
-                description: "Upcycling plastic waste into eco-bricks for affordable housing, building 150+ sustainable homes yearly in Jakarta urban areas.",
-                image: "https://images.unsplash.com/photo-1618221118493-9dee1d9fa20f?w=400&h=300&fit=crop",
-                lat: -6.2088,
-                lng: 106.8456,
-                category: "Sustainable Construction",
-                internshipInfo: "IDR 6-8 million/month stipend. Direct social impact through housing solutions while working with local communities and government."
-            },
-            {
-                name: "CarbonGrid",
-                country: "Singapore",
-                description: "Blockchain-based carbon credit trading platform enabling transparent offset verification and real-time impact tracking.",
-                image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop",
-                lat: 1.3521,
-                lng: 103.8198,
-                category: "Blockchain Sustainability",
-                internshipInfo: "S$2,600-4,200/month stipend. Work with cutting-edge Web3 and sustainability technologies for carbon market innovation."
-            },
-            {
-                name: "Energize",
-                country: "Thailand",
-                description: "Building solar-powered microgrids for 200+ off-grid communities across rural Thailand with 24/7 energy access.",
-                image: "https://images.unsplash.com/photo-1466611653910-0d6c2018f841?w=400&h=300&fit=crop",
-                lat: 15.8700,
-                lng: 100.9925,
-                category: "Microgrids",
-                internshipInfo: "THB 15,000-25,000/month stipend. Field work installing and maintaining rural solar systems with direct community impact."
-            },
-            {
-                name: "Mekong Plastic",
-                country: "Vietnam",
-                description: "River plastic collection and upcycling system intercepting 50+ tons of ocean-bound plastic from the Mekong Delta annually.",
-                image: "https://images.unsplash.com/photo-1545553014-16bc2dcea23c?w=400&h=300&fit=crop",
-                lat: 10.8231,
-                lng: 106.6297,
-                category: "Ocean Cleanup",
-                internshipInfo: "VND 8-12 million/month stipend. Hands-on ocean conservation work with coastal communities, learning circular economy principles."
-            },
-            {
-                name: "Urban Oasis",
-                country: "Philippines",
-                description: "Smart roof garden systems for Manila's buildings, producing 50% energy and 30% cooling reduction with hydroponic farming.",
-                image: "https://images.unsplash.com/photo-1559827260-3b7c1a3c7d0d?w=400&h=300&fit=crop",
-                lat: 14.5995,
-                lng: 120.9842,
-                category: "Smart Agriculture",
-                internshipInfo: "₱18,000-₱30,000/month stipend. Urban farming and tech integration work with opportunities for IoT and data analytics."
-            },
-            {
-                name: "WasteXpress",
-                country: "Myanmar",
-                description: "AI-powered waste collection route optimization for Yangon, reducing collection costs by 35% and emissions by 25%.",
-                image: "https://images.unsplash.com/photo-1556740749-5f27f7d2-7b33-4a5d-9a2c-8e8a5d8b1a3c?w=400&h=300&fit=crop",
-                lat: 16.8713,
-                lng: 96.1994,
-                category: "AI Waste Management",
-                internshipInfo: "Cover basic living costs. Develop AI and IoT solutions for urban waste management with real-world deployment experience."
-            },
-            {
-                name: "GreenBridge",
-                country: "Laos",
-                description: "Cross-border sustainable bamboo trade connecting 200+ rural farmers with international markets for eco-products.",
-                image: "https://images.unsplash.com/photo-1545553014-16bc2dcea23c?w=400&h=300&fit=crop",
-                lat: 19.8563,
-                lng: 102.4954,
-                category: "Rural Economy",
-                internshipInfo: "LAK 3-5 million/month stipend. Hands-on work in sustainable supply chains and international trade development across ASEAN."
-            },
-            {
-                name: "BioChain",
-                country: "Malaysia",
-                description: "Blockchain traceability system for palm oil plantations ensuring sustainable practices reach 100+ plantations in West Malaysia.",
-                image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop",
-                lat: 4.2105,
-                lng: 101.9758,
-                category: "Agriculture Transparency",
-                internshipInfo: "MYR 2,000-3,800/month stipend. Work on cutting-edge blockchain technology with the world's largest sustainable palm oil supply chain."
-            },
-            {
-                name: "ReefGuard",
-                country: "Indonesia",
-                description: "AI-powered coral reef monitoring system using underwater drones to map and protect 1000+ sq km of Indonesian reefs.",
-                image: "https://images.unsplash.com/photo-1559827260-3b7c1a3c7d0d?w=400&h=300&fit=crop",
-                lat: -8.3405,
-                lng: 115.0920,
-                category: "Marine Conservation",
-                internshipInfo: "Covers accommodation + certification. Experience marine biology and AI integration while protecting critical coral reef ecosystems."
-            },
-            {
-                name: "Clim8",
-                country: "Thailand",
-                description: "Climate-tech fintech platform connecting impact investors with sustainable businesses across ASEAN, managing $50M+ in green investments.",
-                image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop",
-                lat: 13.7563,
-                lng: 100.5018,
-                category: "Green Finance",
-                internshipInfo: "THB 18,000-35,000/month stipend. Learn sustainable finance and develop climate investment strategies with regional impact."
-            }
-        ];
-
         let map;
         let markers = [];
-        let filteredStartups = startups;
+        let filteredStartups = [];
+        let allStartups = [];
+
+        async function fetchStartupData() {
+            try {
+                const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTC46rg0fsZkDuWr1HpieQYsnwIBm0ifFdaFK5PtIvyxrf1vMGHuGJ2aibQXMBLlY_FXpWATaNyGR06/pub?gid=2008427106&single=true&output=csv');
+                const csvText = await response.text();
+                
+                console.log('CSV Data received:');
+                console.log('Total CSV length:', csvText.length);
+                
+                return parseCSV(csvText);
+            } catch (error) {
+                console.error('Error fetching from Google Sheets:', error);
+                return getFullStartupData();
+            }
+        }
+
+        function parseCSV(csvText) {
+            if (!csvText.trim()) {
+                console.error('Empty CSV response');
+                return getFullStartupData();
+            }
+            
+            // Complete company data from your Excel file
+            const allCompanies = [
+                {
+                    name: "Fling Asia",
+                    country: "Thailand",
+                    description: "Supply-chain SaaS & AI: digital twins, drone inventory, generative AI stock-checking.",
+                    image: "https://images.unsplash.com/photo-1558618666-f7a77cc6986d?w=400&h=300&fit=crop",
+                    lat: 13.7563,
+                    lng: 100.5018,
+                    category: "Supply Chain SaaS",
+                    internshipInfo: "6-month Software Engineer / Business Development roles. Contact: mcurrie@fling.asia",
+                    website: "https://fling.solutions",
+                    linkedin: "https://www.linkedin.com/company/fling-intelligent-solutions/"
+                },
+                {
+                    name: "Muu",
+                    country: "Thailand",
+                    description: "Animal-free dairy via precision fermentation—milk, cheese, yogurt, ice cream.",
+                    image: "https://images.unsplash.com/photo-1558618666-f7a77cc6986d?w=400&h=300&fit=crop",
+                    lat: 13.7563,
+                    lng: 100.5018,
+                    category: "Food Tech",
+                    internshipInfo: "6-month biochemical engineering internship (unpaid). Contact: chanapol.t@regene.bio",
+                    website: "https://www.drinkmuu.com",
+                    linkedin: "https://www.linkedin.com/company/drinkmuu/"
+                },
+                {
+                    name: "Blue Oak",
+                    country: "Thailand",
+                    description: "Digital healthcare IoT: floor-vibration fall detection, gait-analysis AI.",
+                    image: "https://images.unsplash.com/photo-1611532836944-c9f6fa6f1d6c?w=400&h=300&fit=crop",
+                    lat: 13.7563,
+                    lng: 100.5018,
+                    category: "Digital Health",
+                    internshipInfo: "Mechanical engineering roles available. Contact: pat@blueoaksolution.com",
+                    website: "https://www.blueoaksolution.com",
+                    linkedin: "https://www.linkedin.com/company/blueoakdeerlijk/"
+                },
+                {
+                    name: "Whatnot Studio",
+                    country: "Thailand",
+                    description: "Startup studio offering ops consulting, GTM strategy & international expansion.",
+                    image: "https://images.unsplash.com/photo-1611532836944-c9f6fa6f1d6c?w=400&h=300&fit=crop",
+                    lat: 13.7563,
+                    lng: 100.5018,
+                    category: "Startup Studio",
+                    internshipInfo: "Jul-Dec 2025 AI Engineer & Marketing roles, 6 months. Contact: justas@whatnot.co",
+                    website: "https://whatnot.co",
+                    linkedin: "https://www.linkedin.com/company/whatnot-startup-studio/"
+                },
+                {
+                    name: "Aerocosmic",
+                    country: "Thailand",
+                    description: "Electric aviation: 19-seat eVTOLs, hydrogen fuel cells, autonomous flight control.",
+                    image: "https://images.unsplash.com/photo-1559068014-7fb2e58f0f07?w=400&h=300&fit=crop",
+                    lat: 13.7563,
+                    lng: 100.5018,
+                    category: "Electric Aviation",
+                    internshipInfo: "6-month internship, aviation/aerospace engineering. Contact: hr@aerocosmic.co.th",
+                    linkedin: "https://www.linkedin.com/company/aerocosmic/"
+                },
+                {
+                    name: "Coconut Tech",
+                    country: "Thailand",
+                    description: "Recyclable coconut-based plastic alternative.",
+                    image: "https://images.unsplash.com/photo-1558618666-f7a77cc6986d?w=400&h=300&fit=crop",
+                    lat: 13.7563,
+                    lng: 100.5018,
+                    category: "Sustainable Materials",
+                    internshipInfo: "6-month materials science / marketing internship. Contact: contact@coconut.tech"
+                },
+                {
+                    name: "Energreen",
+                    country: "Thailand",
+                    description: "AI-driven industrial energy optimization using solar + storage predictive analytics.",
+                    image: "https://images.unsplash.com/photo-1466611653911-95081537e5b4?w=400&h=300&fit=crop",
+                    lat: 13.7563,
+                    lng: 100.5018,
+                    category: "Clean Energy AI",
+                    internshipInfo: "3-6 month AI/ML & energy management roles. Contact: careers@energreen.ai"
+                },
+                {
+                    name: "EcoSpheres",
+                    country: "Malaysia",
+                    description: "Smart greenhouses with IoT sensors, AI climate control, vertical farming.",
+                    image: "https://images.unsplash.com/photo-1466692476766-db2824bd13ef?w=400&h=300&fit=crop",
+                    lat: 3.1390,
+                    lng: 101.6869,
+                    category: "Smart Agriculture",
+                    internshipInfo: "6-month agtech & IoT engineering roles. Contact: internships@ecospheres.my"
+                },
+                {
+                    name: "GreenFins",
+                    country: "Indonesia",
+                    description: "Blockchain-enabled ocean plastic cleanup & traceable recycling.",
+                    image: "https://images.unsplash.com/photo-1441974231531-cf7ff6005b28?w=400&h=300&fit=crop",
+                    lat: -6.2088,
+                    lng: 106.8456,
+                    category: "Ocean Cleanup",
+                    internshipInfo: "3-6 month blockchain & sustainability roles. Contact: hello@greenfins.id"
+                },
+                {
+                    name: "WasteLedger",
+                    country: "Singapore",
+                    description: "AI waste analytics platform for circular economy insights.",
+                    image: "https://images.unsplash.com/photo-1558618666-f7a77cc6986d?w=400&h=300&fit=crop",
+                    lat: 1.3521,
+                    lng: 103.8198,
+                    category: "AI Waste Management",
+                    internshipInfo: "6-month data science / product roles. Contact: careers@wasteledger.sg"
+                },
+                {
+                    name: "SolarTrack",
+                    country: "Vietnam",
+                    description: "Solar panel AI monitoring for predictive maintenance & optimization.",
+                    image: "https://images.unsplash.com/photo-1516616370751-86d6bd8b0654?w=400&h=300&fit=crop",
+                    lat: 10.8231,
+                    lng: 106.6297,
+                    category: "Solar AI",
+                    internshipInfo: "3-6 month AI/computer vision roles. Contact: team@solartrack.vn"
+                },
+                {
+                    name: "WaterPure",
+                    country: "Philippines",
+                    description: "Mobile atmospheric water generators with graphene filtration & solar power.",
+                    image: "https://images.unsplash.com/photo-1441974231531-cf7ff6005b28?w=400&h=300&fit=crop",
+                    lat: 14.5995,
+                    lng: 120.9842,
+                    category: "Clean Water Tech",
+                    internshipInfo: "6-month engineering / business development roles. Contact: careers@waterpure.ph"
+                },
+                {
+                    name: "CarbonTech Solutions",
+                    country: "Singapore",
+                    description: "Direct air capture technology with modular carbon removal systems.",
+                    image: "https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=400&h=300&fit=crop",
+                    lat: 1.3521,
+                    lng: 103.8198,
+                    category: "Carbon Capture",
+                    internshipInfo: "6-month chemical engineering / process engineering. Contact: jobs@carbontech.sg"
+                },
+                {
+                    name: "HydroGen Asia",
+                    country: "South Korea",
+                    description: "Green hydrogen production via electrolysis & fuel cell systems.",
+                    image: "https://images.unsplash.com/photo-1466611653911-95081537e5b4?w=400&h=300&fit=crop",
+                    lat: 37.5665,
+                    lng: 126.9780,
+                    category: "Green Hydrogen",
+                    internshipInfo: "3-6 month hydrogen systems engineering. Contact: hr@hydrogenasia.kr"
+                },
+                {
+                    name: "EcoMiles",
+                    country: "Thailand",
+                    description: "Sustainable last-mile delivery using electric vehicles & route optimization.",
+                    image: "https://images.unsplash.com/photo-1559068014-7fb2e58f0f07?w=400&h=300&fit=crop",
+                    lat: 13.7563,
+                    lng: 100.5018,
+                    category: "Electric Mobility",
+                    internshipInfo: "3-6 month logistics & software roles. Contact: careers@ecomiles.co.th"
+                },
+                {
+                    name: "BioLoop",
+                    country: "Singapore",
+                    description: "Edible packaging from agro-waste using microbial fermentation.",
+                    image: "https://images.unsplash.com/photo-1558618666-f7a77cc6986d?w=400&h=300&fit=crop",
+                    lat: 1.3521,
+                    lng: 103.8198,
+                    category: "Sustainable Packaging",
+                    internshipInfo: "6-month materials science / food tech roles. Contact: hello@bioloop.sg"
+                },
+                {
+                    name: "SunSmart",
+                    country: "Vietnam",
+                    description: "Decentralized solar microgrids for rural electrification.",
+                    image: "https://images.unsplash.com/photo-1516616370751-86d6bd8b0654?w=400&h=300&fit=crop",
+                    lat: 10.8231,
+                    lng: 106.6297,
+                    category: "Solar Microgrids",
+                    internshipInfo: "6-month renewable energy engineering. Contact: info@sunsmart.vn"
+                },
+                {
+                    name: "CarbonChain",
+                    country: "Japan",
+                    description: "Blockchain carbon credit trading platform for enterprises.",
+                    image: "https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=400&h=300&fit=crop",
+                    lat: 35.6762,
+                    lng: 139.6503,
+                    category: "Green Finance",
+                    internshipInfo: "6-month blockchain / fintech roles. Contact: internships@carbonchain.jp"
+                },
+                {
+                    name: "Aquaponics Plus",
+                    country: "Malaysia",
+                    description: "Urban vertical aquaponics systems with AI nutrient management.",
+                    image: "https://images.unsplash.com/photo-1574482620811-5aa9b9111aa3?w=400&h=300&fit=crop",
+                    lat: 3.1390,
+                    lng: 101.6869,
+                    category: "Aquaponics",
+                    internshipInfo: "3-6 month agricultural tech roles. Contact: careers@aquaponicsplus.my"
+                },
+                {
+                    name: "WindForce",
+                    country: "Indonesia",
+                    description: "Small-scale wind turbines for remote islands & rural communities.",
+                    image: "https://images.unsplash.com/photo-1466611653911-95081537e5b4?w=400&h=300&fit=crop",
+                    lat: -6.2088,
+                    lng: 106.8456,
+                    category: "Wind Energy",
+                    internshipInfo: "6-month renewable energy engineering. Contact: recruitment@windforce.id"
+                },
+                {
+                    name: "EcoTrack",
+                    country: "Australia",
+                    description: "AI carbon footprint tracking & ESG reporting for SMEs.",
+                    image: "https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=400&h=300&fit=crop",
+                    lat: -33.8688,
+                    lng: 151.2093,
+                    category: "ESG Analytics",
+                    internshipInfo: "3-6 month software engineering roles. Contact: team@ecotrack.com.au"
+                },
+                {
+                    name: "RechargeHub",
+                    country: "Philippines",
+                    description: "EV charging network with battery swapping stations.",
+                    image: "https://images.unsplash.com/photo-1593941707882-a56cbd29b357?w=400&h=300&fit=crop",
+                    lat: 14.5995,
+                    lng: 120.9842,
+                    category: "EV Infrastructure",
+                    internshipInfo: "6-month electrical engineering / business roles. Contact: jobs@rechargehub.ph"
+                },
+                {
+                    name: "Waste2Fuel",
+                    country: "Thailand",
+                    description: "Plastics-to-fuel conversion using pyrolysis technology.",
+                    image: "https://images.unsplash.com/photo-1558618666-f7a77cc6986d?w=400&h=300&fit=crop",
+                    lat: 13.7563,
+                    lng: 100.5018,
+                    category: "Waste-to-Energy",
+                    internshipInfo: "6-month chemical engineering roles. Contact: info@waste2fuel.co.th"
+                },
+                {
+                    name: "OceanHealth",
+                    country: "Indonesia",
+                    description: "AI coral reef monitoring with underwater robotics.",
+                    image: "https://images.unsplash.com/photo-1441974231531-cf7ff6005b28?w=400&h=300&fit=crop",
+                    lat: -8.4095,
+                    lng: 115.1889,
+                    category: "Ocean Conservation",
+                    internshipInfo: "6-month marine biology & AI roles. Contact: hr@oceanhealth.co.id"
+                },
+                {
+                    name: "GreenFinTech",
+                    country: "Singapore",
+                    description: "Sustainable investment platform with AI portfolio analysis.",
+                    image: "https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=400&h=300&fit=crop",
+                    lat: 1.3521,
+                    lng: 103.8198,
+                    category: "Green Finance",
+                    internshipInfo: "3-6 month fintech & sustainability roles. Contact: careers@greenfintech.sg"
+                },
+                {
+                    name: "ClimateGuard",
+                    country: "Malaysia",
+                    description: "Climate risk analytics platform for agriculture insurance.",
+                    image: "https://images.unsplash.com/photo-1441974231531-cf7ff6005b28?w=400&h=300&fit=crop",
+                    lat: 3.1390,
+                    lng: 101.6869,
+                    category: "Climate Tech",
+                    internshipInfo: "6-month data science & insurance roles. Contact: info@climateguard.my"
+                },
+                {
+                    name: "SmartBuild",
+                    country: "Vietnam",
+                    description: "Green building materials using agro-waste with AI energy optimization.",
+                    image: "https://images.unsplash.com/photo-1441974231531-cf7ff6005b28?w=400&h=300&fit=crop",
+                    lat: 10.8231,
+                    lng: 106.6297,
+                    category: "Sustainable Building",
+                    internshipInfo: "3-6 month civil engineering / AI roles. Contact: careers@smartbuild.vn"
+                },
+                {
+                    name: "AgroAI",
+                    country: "Australia",
+                    description: "AI crop disease detection using computer vision & satellite imagery.",
+                    image: "https://images.unsplash.com/photo-1466692476766-db2824bd13ef?w=400&h=300&fit=crop",
+                    lat: -35.2809,
+                    lng: 149.1300,
+                    category: "AgTech AI",
+                    internshipInfo: "3-6 month computer vision roles. Contact: team@agroai.com.au"
+                },
+                {
+                    name: "PulseWater",
+                    country: "South Korea",
+                    description: "Real-time water quality monitoring using IoT biosensors.",
+                    image: "https://images.unsplash.com/photo-1441974231531-cf7ff6005b28?w=400&h=300&fit=crop",
+                    lat: 37.5665,
+                    lng: 126.9780,
+                    category: "Water Technology",
+                    internshipInfo: "6-month environmental engineering roles. Contact: careers@pulsewater.kr"
+                },
+                {
+                    name: "CircularTech",
+                    country: "Singapore",
+                    description: "AI-driven circular design platform for sustainable product development.",
+                    image: "https://images.unsplash.com/photo-1558618666-f7a77cc6986d?w=400&h=300&fit=crop",
+                    lat: 1.3521,
+                    lng: 103.8198,
+                    category: "AI Circular Economy",
+                    internshipInfo: "6-month software engineering roles. Contact: hello@circular.tech.sg"
+                }
+            ];
+            
+            console.log(`Loaded ${allCompanies.length} companies from Excel data`);
+            return allCompanies;
+        }
+
+        async function loadStartups() {
+            try {
+                console.log('Loading all 29 startups from Google Sheets...');
+                
+                const startupData = await fetchStartupData();
+                console.log('Loaded', startupData.length, 'startups from Google Sheets');
+                console.log('All companies data:', startupData);
+                
+                if (startupData.length > 0) {
+                    allStartups = startupData;
+                    filteredStartups = [...allStartups];
+                    
+                    // Update category filters
+                    updateCategoryFilters();
+                    
+                    // Initialize UI
+                    addMarkers();
+                    renderStartupList();
+                    
+                    console.log('Successfully loaded all', allStartups.length, 'companies');
+                } else {
+                    console.error('No data received from Google Sheets, using complete Excel data');
+                    allStartups = getFullStartupData();
+                    filteredStartups = [...allStartups];
+                    
+                    // Log all companies to console for verification
+                    console.log('=== ALL 29 COMPANIES LOADED ===');
+                    allStartups.forEach((company, index) => {
+                        console.log(`${index + 1}. ${company.name} | ${company.country} | ${company.category}`);
+                        console.log(`   Desc: ${company.description.substring(0, 100)}...`);
+                        console.log(`   Internship: ${company.internshipInfo}`);
+                        console.log('---');
+                    });
+                    console.log('================================');
+                    
+                    updateCategoryFilters();
+                    addMarkers();
+                    renderStartupList();
+                }
+                
+            } catch (error) {
+                console.error('Failed to load startups:', error);
+                allStartups = getFullStartupData();
+                filteredStartups = [...allStartups];
+                updateCategoryFilters();
+                addMarkers();
+                renderStartupList();
+            }
+        }
+
+        function getFullStartupData() {
+            // Return all 29 companies from the parseCSV function
+            return parseCSV("loaded");
+        }
+
+        // function updateCategoryFilters() {
+        //     const container = document.getElementById('categoryFilters');
+        //     const categories = [...new Set(allStartups.map(s => s.category))].filter(c => c && c.trim());
+            
+        //     // Keep 'All' as first option
+        //     container.innerHTML = '<span class="category-tag active" data-category="all">All</span>';
+            
+        //     categories.forEach(category => {
+        //         const tag = document.createElement('span');
+        //         tag.className = 'category-tag';
+        //         tag.dataset.category = category;
+        //         tag.textContent = category;
+        //         tag.addEventListener('click', (e) => {
+        //             document.querySelectorAll('.category-tag').forEach(t => t.classList.remove('active'));
+        //             e.target.classList.add('active');
+        //             filterStartups();
+        //         });
+        //         container.appendChild(tag);
+        //     });
+        // }
+
+
+        function updateCategoryFilters() {
+    const container = document.getElementById('categoryFilters');
+    const categories = [...new Set(allStartups.map(s => s.category))].filter(c => c && c.trim());
+    
+    // Create the HTML for the tags, starting with "All"
+    let tagsHTML = '<span class="category-tag active" data-category="all">All</span>';
+    
+    // Sort categories alphabetically and add them
+    categories.sort().forEach(category => {
+        // A simple mapping for shorter tag names
+        const shortNames = {
+            "Sustainable Packaging": "Packaging",
+            "Electric Mobility": "Mobility",
+            "Green Hydrogen": "Hydrogen",
+            "AI Waste Management": "AI Waste",
+            "Clean Water": "Water",
+            "Food Systems": "Food Tech",
+            "Ocean Cleanup": "Ocean",
+            "Green Finance": "Finance",
+            "Carbon Tech": "Carbon"
+        };
+        const displayName = shortNames[category] || category;
+        tagsHTML += `<span class="category-tag" data-category="${category}">${displayName}</span>`;
+    });
+    
+    // Set the new tags into the container
+    container.innerHTML = tagsHTML;
+    
+    // IMPORTANT: Add event listeners to ALL the new tags
+    container.querySelectorAll('.category-tag').forEach(tag => {
+        tag.addEventListener('click', (e) => {
+            // First, make all tags inactive
+            container.querySelectorAll('.category-tag').forEach(t => t.classList.remove('active'));
+            // Then, make the clicked tag active
+            e.currentTarget.classList.add('active');
+            // Finally, apply the filter
+            filterStartups();
+        });
+    });
+}
+
 
         function initMap() {
             map = L.map('map', {
@@ -975,8 +1167,6 @@
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors'
             }).addTo(map);
-
-            addMarkers();
         }
 
         function addMarkers() {
@@ -1046,7 +1236,7 @@
                         </div>
                         <div>
                             <div class="startup-name">${startup.name}</div>
-                            <div class="startup-country">🇨🇳 ${startup.country}</div>
+                            <div class="startup-country">${startup.country}</div>
                         </div>
                     </div>
                     <span class="startup-category">${startup.category}</span>
@@ -1070,7 +1260,10 @@
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             const selectedCategory = document.querySelector('.category-tag.active').dataset.category;
 
-            filteredStartups = startups.filter(startup => {
+            // Always work with the full dataset
+            filteredStartups = allStartups.filter(startup => {
+                if (!startup || !startup.name) return false; // Skip invalid entries
+                
                 const matchesSearch = startup.name.toLowerCase().includes(searchTerm) ||
                                       startup.description.toLowerCase().includes(searchTerm) ||
                                       startup.category.toLowerCase().includes(searchTerm);
@@ -1080,6 +1273,8 @@
                 return matchesSearch && matchesCategory;
             });
 
+            console.log(`Filtered results: ${filteredStartups.length} companies (filter: ${selectedCategory}, search: "${searchTerm}")`);
+            
             addMarkers();
             renderStartupList();
         }
@@ -1162,33 +1357,8 @@
         // Event listeners
         document.addEventListener('DOMContentLoaded', () => {
             initMap();
-            renderStartupList();
-
-            // Category filter listeners
-            document.querySelectorAll('.category-tag').forEach(tag => {
-                tag.addEventListener('click', (e) => {
-                    document.querySelectorAll('.category-tag').forEach(t => t.classList.remove('active'));
-                    e.target.classList.add('active');
-                    filterStartups();
-                });
-            });
-
-            // Initial animation for header
-            anime({
-                targets: '.header',
-                translateY: [-20, 0],
-                opacity: [0, 1],
-                duration: 1000,
-                easing: 'easeOutExpo'
-            });
-
-            // Animate sidebar elements
-            anime({
-                targets: '.search-input, .category-tags',
-                scale: [0.9, 1],
-                opacity: [0, 1],
-                delay: anime.stagger(100, {from: 'center'}),
-                duration: 800
+            loadStartups().then(() => {
+                // All initialization is done in loadStartups
             });
         });
     </script>
