@@ -68,7 +68,7 @@
 
         .container {
             display: grid;
-            grid-template-columns: 1fr 600px;
+            grid-template-columns: 1fr 700px;
             height: 100vh;
             gap: 0;
             overflow: hidden;
@@ -203,6 +203,18 @@
             gap: 1rem;
             padding: 0.5rem;
         }
+
+        .startup-card h3 {
+  margin-top: 0;
+  color: #007acc;
+}
+.startup-card pre {
+  background: #f8f8f8;
+  padding: 10px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+        
 
         .startup-card {
             background: rgba(72, 187, 120, 0.08);
@@ -433,7 +445,7 @@
         @media (min-width: 1025px) {
             .back-home-btn {
                 top: 1.5rem;
-                right: 40rem;
+                right: 47rem;
             }
         }
 
@@ -590,6 +602,40 @@
                 transform: rotate(360deg);
             }
         }
+
+        /* Modal styles */
+        .see-more-btn {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        .see-more-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-content {
+            animation: fadeInScale 0.3s ease;
+        }
     </style>
 </head>
 <body>
@@ -631,27 +677,19 @@
             <div class="search-filter">
                 <input type="text" 
                        id="searchInput" 
-                       placeholder="Search startups..." 
+                       placeholder="Search by company name..." 
                        class="search-input"
-                       oninput="filterStartups()">
-                
-                <div class="category-tags" id="categoryFilters">
-                    <span class="category-tag active" data-category="all">All</span>
-                    <span class="category-tag" data-category="Carbon Tech">Carbon</span>
-                    <span class="category-tag" data-category="Green Hydrogen">Hydrogen</span>
-                    <span class="category-tag" data-category="Electric Mobility">Mobility</span>
-                    <span class="category-tag" data-category="Clean Water">Water</span>
-                    <span class="category-tag" data-category="Sustainable Packaging">Packaging</span>
-                    <span class="category-tag" data-category="Food Systems">Food Tech</span>
-                    <span class="category-tag" data-category="AI Waste Management">AI Waste</span>
-                    <span class="category-tag" data-category="Ocean Cleanup">Ocean</span>
-                    <span class="category-tag" data-category="Green Finance">Finance</span>
-                </div>
+                       oninput="filterCompaniesByName()">
+                <div id="search-results-info" class="mt-2 text-sm text-gray-600 hidden"></div>
             </div>
 
             <div id="api-startups-card" style="margin-bottom: 2rem;">
                 <h3 style="color: #48bb78; margin-bottom: 1rem; font-size: 1.25rem; font-weight: 600;">API Startups</h3>
                 <div id="api-startup-list" class="startup-list">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p style="margin-left: 10px; color: #48bb78;">Loading data...</p>
+                    </div>
                 </div>
             </div>
 
@@ -737,36 +775,21 @@
                 
                 if (startupData.length > 0) {
                     console.log('✅ Google Sheets data loaded successfully!');
-                    allStartups = startupData;
+                    
+                    // Process companies with address-based geocoding
+                    const processedCompanies = await processCompaniesWithAddress(startupData);
+                    allStartups = processedCompanies;
                     filteredStartups = [...allStartups];
                     
-                    // Display Google Sheets data structure
-                    // console.group('📋 Google Sheets Data Structure');
-                    // allStartups.forEach((company, index) => {
-                    //     console.log(`--- Google Sheets Entry #${index + 1} ---`);
-                    //     console.log(`Name: ${company.name}`);
-                    //     console.log(`Country: ${company.country}`);
-                    //     console.log(`Category: ${company.category}`);
-                    //     console.log(`Description: ${company.description?.substring(0, 100)}...`);
-                    //     console.log(`Lat: ${company.lat}, Lng: ${company.lng}`);
-                    //     console.log(`Internship: ${company.internshipInfo}`);
-                    //     console.log('');
-                    // });
-                    // console.groupEnd();
-                    
-                    // console.log('🎯 Google Sheets data ready for display:', allStartups.length);
-                    
                     // Update UI with Google Sheets data
-                    updateCategoryFilters();
                     addMarkers();
-                    renderStartupList();
                     
-                    console.log('✨ UI updated with Google Sheets data!');
+                    console.log('✨ UI updated with Google Sheets address data!');
                 } else {
                     console.log('⚠️ Google Sheets empty, using sample data...');
                     allStartups = getFullStartupData();
                     filteredStartups = [...allStartups];
-                    renderStartupList();
+                    addMarkers();
                 }
                 
             } catch (error) {
@@ -775,137 +798,344 @@
                 // Use fallback data since Google Sheets may have access restrictions
                 allStartups = getFullStartupData();
                 filteredStartups = [...allStartups];
-                updateCategoryFilters();
                 addMarkers();
-                renderStartupList();
+            }
+        }
+
+        async function processCompaniesWithAddress(companies) {
+            console.log('📍 Geocoding addresses for companies...');
+            
+            const processedCompanies = [];
+            let geocodedCount = 0;
+            
+            // Use a single, fixed location for testing all markers
+            const testLocations = {
+                0: { lat: 3.1390, lng: 101.6869 }, // Kuala Lumpur
+                1: { lat: 1.3521, lng: 103.8198 }, // Singapore  
+                2: { lat: 13.7563, lng: 100.5018 }, // Bangkok
+                3: { lat: -6.2088, lng: 106.8456 }, // Jakarta
+                4: { lat: 14.5995, lng: 120.9842 }, // Manila
+                5: { lat: 16.8713, lng: 96.1994 }, // Yangon
+                6: { lat: 11.5449, lng: 104.9214 }, // Phnom Penh
+                7: { lat: 17.9757, lng: 102.6331 }, // Vientiane
+                8: { lat: 21.0278, lng: 105.8342 }, // Hanoi
+                9: { lat: 22.3193, lng: 114.1694 }, // Hong Kong
+            };
+            
+            for (let i = 0; i < companies.length; i++) {
+                const company = companies[i];
+                const processedCompany = { ...company };
+                
+                // Skip geocoding for now and use test locations to ensure markers show
+                processedCompany.lat = testLocations[i % 10].lat;
+                processedCompany.lng = testLocations[i % 10].lng;
+                processedCompany.name = company['Company Name'];
+                processedCompany.country = 'Southeast Asia';
+                processedCompany.category = company['Industry / Products & Services'] || 'Unknown';
+                processedCompany.description = company['Job Description']?.substring(0, 200) + '...' || 'Sustainable startup';
+                processedCompany.internshipInfo = company['Possible internship roles'] || 'Various internships available';
+                processedCompany.image = 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=150&h=150&fit=crop';
+                
+                processedCompanies.push(processedCompany);
+                geocodedCount++;
+            }
+            
+            console.log(`📊 Assigned coordinates for ${geocodedCount}/${companies.length} companies`);
+            return processedCompanies;
+        }
+
+        async function geocodeAddress(address) {
+            const encodedAddress = encodeURIComponent(address);
+            const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodedAddress}&limit=1`;
+            
+            try {
+                const response = await fetch(url, {
+                    headers: {
+                        'User-Agent': 'Sustainable Startups Map - Educational Tool',
+                        'Accept-Language': 'en-US,en;q=0.9',
+                        'Connection': 'keep-alive'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data && data.length > 0) {
+                    return {
+                        lat: parseFloat(data[0].lat),
+                        lng: parseFloat(data[0].lon)
+                    };
+                } else {
+                    console.warn(`🔍 No results found for address: ${address}`);
+                    return { lat: null, lng: null };
+                }
+                
+            } catch (error) {
+                console.error('🌐 Geocoding service error:', error);
+                return { lat: null, lng: null };
             }
         }
 
         function displayAPIDataInSidebar(data) {
-            const container = document.getElementById('api-startup-list');
-            
-            if (!data || data.length === 0) {
-                container.innerHTML = '<div class="startup-card"><p>No API data available</p></div>';
-                return;
-            }
-            
-            container.innerHTML = '';
+  const container = document.getElementById('api-startup-list');
+  
+  if (!data || data.length === 0) {
+    container.innerHTML = '<div class="startup-card"><p>No API data available</p></div>';
+    return;
+  }
 
-            data.forEach((startup, index) => {
-                const card = document.createElement('div');
-                card.className = 'startup-card fade-in';
-                
-                // Dynamically extract name from any available key
-                const getBestName = (obj) => {
-                    const possibleKeys = ['name', 'Name', 'companyName', 'CompanyName', 'company', 'Organization', 'organization', 'title'];
-                    return possibleKeys.map(key => obj[key]).find(value => value && value.trim()) || 'Unknown';
-                };
-                
-                const name = getBestName(startup);
-                
-                // Create organized content display
-                const createDataRows = (obj) => {
-                    const importantData = {};
-                    
-                    // Extract only meaningful data, skip status fields
-                    const skipPatterns = ['status', 'Status', 'openFor', 'Status:', 'availability', 'hiring'];
-                    
-                    for (const [key, value] of Object.entries(obj)) {
-                        if (value && typeof value === 'string' && !skipPatterns.some(p => key.toLowerCase().includes(p.toLowerCase()))) {
-                            if (value.length > 0 && value !== 'N/A' && value !== 'none') {
-                                // Smart field mapping
-                                let displayKey = key;
-                                const cleanKey = key.toLowerCase();
-                                
-                                if (cleanKey === 'description' || cleanKey.includes('desc')) {
-                                    displayKey = 'About';
-                                } else if (cleanKey === 'category' || cleanKey.includes('type')) {
-                                    displayKey = 'Category';
-                                } else if (cleanKey === 'funding' || cleanKey.includes('fund')) {
-                                    displayKey = 'Funding';
-                                } else if (cleanKey.includes('employee') || cleanKey.includes('team')) {
-                                    displayKey = 'Team Size';
-                                } else if (cleanKey === 'stage' || cleanKey.includes('phase')) {
-                                    displayKey = 'Stage';
-                                } else {
-                                    displayKey = key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1');
-                                }
-                                
-                                importantData[displayKey] = value;
-                            }
-                        }
-                    }
-                    
-                    // Generate clean HTML
-                    const items = [];
-                    const order = ['About', 'Description', 'Category', 'Industry', 'Stage', 'Funding', 'Team Size', 'Founded'];
-                    
-                    for (const key of order) {
-                        if (importantData[key]) {
-                            let val = importantData[key];
-                            if (key === 'About' || key === 'Description') {
-                                val = val.substring(0, 150) + (val.length > 150 ? '...' : '');
-                            }
-                            items.push(`<div style="margin: 0.25rem 0; padding: 0.25rem 0; border-bottom: 1px solid rgba(72,187,120,0.1);"><strong style="color: #2f855a;">${key}:</strong> ${val}</div>`);
-                        }
-                    }
-                    
-                    // Add any remaining important data
-                    for (const [key, value] of Object.entries(importantData)) {
-                        if (!order.includes(key)) {
-                            items.push(`<div style="margin: 0.25rem 0; padding: 0.25rem 0; color: #4a5568;">${value}</div>`);
-                        }
-                    }
-                    
-                    return items.length > 0 ? items.join('') : '<p style="color: #718096; font-size: 0.8rem;">Details available</p>';
-                };
-                
-                // Try to find image
-                const imageKeys = ['image', 'Image', 'logo', 'Logo', 'profileImage', 'Photo', 'photo'];
-                const image = imageKeys.map(key => startup[key]).find(value => value && value.trim()) || 
-                               `https://via.placeholder.com/50x50/48bb78/ffffff?text=${name.charAt(0)}`;
-                
-                // Try to find location
-                const locationKeys = ['country', 'Country', 'location', 'Location', 'city', 'City', 'region', 'Region'];
-                const location = locationKeys.map(key => startup[key]).find(value => value && value.trim()) || 'Unknown';
-                
-                // Clean static layout with enforced readability
-                const locationDisplay = location !== 'Unknown' ? 
-                    `<div style="margin-top: 0.25rem; color: #4a5568; font-weight: 500;">${location}</div>` : '';
-                
-                card.innerHTML = `
-                    <div style="padding: 1.5rem; display: flex; flex-direction: column; min-height: 100%;">
-                        <!-- Company Name -->
-                        <div style="font-size: 1.25rem; font-weight: 700; color: #1f2937; margin-bottom: 0.25rem;">
-                            ${name}
-                        </div>
-                        ${locationDisplay}
-                        
-                        <!-- Clean summary -->
-                        ${createDataRows(startup)}
-                    </div>
-                `;
-                
-                // Add click handler if lat/lng available
-                if (startup.lat && startup.lng) {
-                    card.onclick = () => {
-                        map.setView([startup.lat, startup.lng], 10);
-                        const marker = markers.find(m => 
-                            m.getLatLng().lat === startup.lat && 
-                            m.getLatLng().lng === startup.lng
-                        );
-                        if (marker) marker.openPopup();
-                    };
-                }
-                
-                container.appendChild(card);
-                
-                // Animate entrance
-                setTimeout(() => {
-                    card.classList.add('animate');
-                }, index * 50);
-            });
+  container.innerHTML = ''; // Clear previous content if any
+
+  companyData = [...data];
+    
+  data.forEach((item, index) => {
+    const {
+      ['Company Name']: companyName = 'N/A',
+      Status = 'N/A',
+      Address = '',
+      ['Contact Person']: contactPerson = '',
+      ['Contact Number']: contactNumber = '',
+      Email = '',
+      Website = '',
+      ['Job Description']: jobDescription = '',
+      ['Company Contact number']: companyContact = '',
+      LinkedIn = '',
+      Facebook = '',
+      Instagram = '',
+      ['Industry / Products & Services']: industry = '',
+      ['Possible internship roles']: roles = '',
+      ['OEP Batch']: oepBatch = ''
+    } = item;
+
+    const card = document.createElement('div');
+    card.classList.add('startup-card');
+    card.innerHTML = `
+      <div >
+  <h3 style="font-size: 2rem; font-weight: 700; color: black; margin: 0 0 1rem 0;">${companyName}</h3>
+  
+  <p style="margin: 0.5rem 0;"><strong style="font-weight: 600;">Status:</strong> ${Status}</p>
+  <p style="margin: 0.5rem 0;"><strong style="font-weight: 600;">Address:</strong> ${Address.replace(/\n/g, '<br>')}</p>
+  <p style="margin: 0.5rem 0;"><strong style="font-weight: 600;">Contact Person:</strong> ${contactPerson}</p>
+  <p style="margin: 0.5rem 0;"><strong style="font-weight: 600;">Contact Number:</strong> ${contactNumber || companyContact}</p>
+  <p style="margin: 0.5rem 0;"><strong style="font-weight: 600;">Email:</strong> <a href="mailto:${Email}" style="color: #2563eb; text-decoration: underline;">${Email}</a></p>
+  <p style="margin: 0.5rem 0;"><strong style="font-weight: 600;">Website:</strong> <a href="${Website}" target="_blank" style="color: #2563eb; text-decoration: underline;">${Website}</a></p>
+  <!--   <p style="margin: 0.5rem 0;"><strong style="font-weight: 600;">LinkedIn:</strong> ${LinkedIn}</p>-->
+  <!-- <p style="margin: 0.5rem 0;"><strong style="font-weight: 600;">Facebook:</strong> ${Facebook}</p>-->
+  <!--<p style="margin: 0.5rem 0;"><strong style="font-weight: 600;">Instagram:</strong> ${Instagram}</p>-->
+  <!--<p style="margin: 0.5rem 0;">
+    <strong style="font-weight: 600;">Industry:</strong><br>
+    ${industry.replace(/\n/g, '<br>')}
+  </p>-->
+  <p style="margin: 0.5rem 0;"><strong style="font-weight: 600;">Possible Internship Roles:</strong> ${roles}</p>
+  <div style="margin-top: 1rem;">
+    <p style="font-weight: 600; margin-bottom: 0.5rem;">Job Description:</p>
+    <div id="truncated-desc-${index}" style="background: #f3f4f6; border-radius: 0.5rem; padding: 0.75rem; white-space: pre-wrap; font-size: 0.875rem; line-height: 1.5;">
+        ${jobDescription.length > 120 ? jobDescription.substring(0, 120) + '...' : jobDescription}
+    </div>
+    <button onclick="showFullCardDetails(${index})" style="
+        background: linear-gradient(135deg, #48bb78, #38a169);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 0.875rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        margin-top: 0.75rem;
+    ">
+        See full details...
+    </button>
+  </div>
+</div>
+
+    `;
+
+    container.appendChild(card);
+  });
+}
+
+let companyData = [];
+
+function showFullCardDetails(index) {
+    if (!companyData[index]) return;
+    
+    const company = companyData[index];
+    
+    const modal = document.createElement('div');
+    modal.id = 'fullCardModal';
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        backdrop-filter: blur(10px);
+        padding: 20px;
+    `;
+
+    const content = document.createElement('div');
+    content.style.cssText = `
+        background: white;
+        border-radius: 1.5rem;
+        padding: 2rem;
+        max-width: 600px;
+        max-height: 80vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        animation: fadeInScale 0.3s ease;
+        position: relative;
+    `;
+
+    content.innerHTML = `
+        <button onclick="closeFullCardModal()" style="
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6b7280;
+            padding: 0.25rem;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+        ">&times;</button>
+        
+        <div style="display: grid; gap: 1rem; color: #374151;">
+            <h2 style="font-size: 1.75rem; font-weight: 700; color: #48bb78; margin: 0 2rem 0 0;">${company['Company Name']}</h2>
+            
+            <div>
+                <strong style="color: #1f2937;">Status:</strong> 
+                <span style="padding: 0.25rem 0.75rem; border-radius: 9999px; background: #e5e7eb; font-size: 0.875rem;">${company['Status']}</span>
+            </div>
+            
+            <div>
+                <strong style="color: #1f2937;">Address:</strong>
+                <div style="background: #f9fafb; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #48bb78; margin-top: 0.5rem; font-size: 0.875rem;">
+                    ${company['Address'] ? company['Address'].replace(/\n/g, '<br>') : 'Not provided'}
+                </div>
+            </div>
+            
+            <div>
+                <strong style="color: #1f2937;">Contact Person:</strong> ${company['Contact Person'] || 'Not specified'}
+            </div>
+            
+            <div>
+                <strong style="color: #1f2937;">Contact Number:</strong> ${company['Contact Number'] || company['Company Contact number'] || 'Not provided'}
+            </div>
+            
+            <div>
+                <strong style="color: #1f2937;">Email:</strong> 
+                ${company['Email'] ? `<a href="mailto:${company['Email']}" style="color: #3b82f6;">${company['Email']}</a>` : 'Not provided'}
+            </div>
+            
+            <div>
+                <strong style="color: #1f2937;">Website:</strong> 
+                ${company['Website'] ? `<a href="${company['Website']}" target="_blank" style="color: #3b82f6;">${company['Website']}</a>` : 'Not provided'}
+            </div>
+            
+            ${company['LinkedIn'] ? `<div><strong>LinkedIn:</strong> ${company['LinkedIn']}</div>` : ''}
+            ${company['Facebook'] ? `<div><strong>Facebook:</strong> ${company['Facebook']}</div>` : ''}
+            ${company['Instagram'] ? `<div><strong>Instagram:</strong> ${company['Instagram']}</div>` : ''}
+            
+            <div>
+                <strong style="color: #1f2937;">Industry / Products & Services:</strong>
+                <div style="background: #f9fafb; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #48bb78; margin-top: 0.5rem; font-size: 0.875rem;">
+                    ${company['Industry / Products & Services']?.replace(/\n/g, '<br>') || 'Not specified'}
+                </div>
+            </div>
+            
+            <div>
+                <strong style="color: #1f2937;">Possible Internship Roles:</strong>
+                <div style="background: #f9fafb; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #48bb78; margin-top: 0.5rem; font-size: 0.875rem;">
+                    ${company['Possible internship roles'] || 'Not specified'}
+                </div>
+            </div>
+            
+            <div>
+                <strong style="color: #1f2937;">OEP Batch:</strong> ${company['OEP Batch'] || 'Not specified'}
+            </div>
+            
+            <div>
+                <strong style="color: #1f2937;">Job Description:</strong>
+                <pre style="background: #f9fafb; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #48bb78; margin-top: 0.5rem; white-space: pre-wrap; font-size: 0.875rem; line-height: 1.6;">${company['Job Description'] || 'No job description available.'}</pre>
+            </div>
+        </div>
+    `;
+
+    modal.appendChild(content);
+    document.body.appendChild(modal);
+
+    // Close modal on background click
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeFullCardModal();
         }
+    });
+
+    // Close modal with Escape key
+    const handleEscape = function(e) {
+        if (e.key === 'Escape') {
+            closeFullCardModal();
+            document.removeEventListener('keydown', handleEscape);
+        }
+    };
+    document.addEventListener('keydown', handleEscape);
+}
+
+function closeFullCardModal() {
+    const modal = document.getElementById('fullCardModal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+// Function to show a specific company card in the sidebar
+function showCardInSidebar(companyName) {
+    // Ensure sidebar is open
+    const sidebar = document.querySelector('.sidebar');
+    if (window.innerWidth <= 1024) {
+        sidebar.classList.add('show');
+        document.querySelector('.overlay').classList.add('show');
+    }
+    
+    // Find the company by name
+    const companyIndex = companyData.findIndex(company => 
+        company['Company Name'] === companyName
+    );
+    
+    if (companyIndex !== -1) {
+        // Scroll to the specific company card
+        const companyCard = document.querySelectorAll('.startup-card')[companyIndex];
+        if (companyCard) {
+            setTimeout(() => {
+                companyCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                companyCard.style.transition = 'all 0.3s ease';
+                companyCard.style.boxShadow = '0 0 20px rgba(72, 187, 120, 0.5)';
+                
+                // Reset highlight after animation
+                setTimeout(() => {
+                    companyCard.style.boxShadow = '';
+                }, 2000);
+            }, 300);
+        }
+    }
+}
+
 
         function initMap() {
             map = L.map('map', {
@@ -920,49 +1150,105 @@
         }
 
         function addMarkers() {
+            console.log(`📍 Adding ${filteredStartups.length} markers to map...`);
+            
             // Clear existing markers
             markers.forEach(marker => map.removeLayer(marker));
             markers = [];
 
-            // Add anime.js entrance animation delay
-            filteredStartups.forEach((startup, index) => {
-                setTimeout(() => {
-                    const marker = L.marker([startup.lat, startup.lng])
-                        .addTo(map)
-                        .bindPopup(createPopupContent(startup));
-                    
-                    markers.push(marker);
+            if (filteredStartups.length === 0) {
+                console.warn('⚠️ No startups found to add markers!');
+                return;
+            }
 
-                    // Animate marker creation
-                    const markerElement = marker._icon;
-                    if (markerElement) {
-                        markerElement.style.opacity = '0';
-                        markerElement.style.transform = 'scale(0.1)';
+            const validCoordinates = [];
+            
+            // Filter and add markers immediately
+            filteredStartups.forEach((startup, index) => {
+                const lat = typeof startup.lat === 'number' ? startup.lat : null;
+                const lng = typeof startup.lng === 'number' ? startup.lng : null;
+                
+                if (lat && lng && lat !== 0 && lng !== 0) {
+                    try {
+                        const marker = L.marker([lat, lng])
+                            .addTo(map)
+                            .bindPopup(createPopupContent(startup, index));
                         
-                        anime({
-                            targets: markerElement,
-                            opacity: 1,
-                            scale: 1,
-                            duration: 800,
-                            delay: index * 100,
-                            easing: 'easeOutElastic'
-                        });
+                        markers.push(marker);
+                        validCoordinates.push([lat, lng]);
+                        
+                        console.log(`✅ Added marker for: ${startup.name || 'Startup ' + index} at ${lat}, ${lng}`);
+                    } catch (error) {
+                        console.error(`❌ Error adding marker:`, error);
                     }
-                }, 50); // Minimal delay for smooth loading
+                } else {
+                    console.warn(`⚠️ Using backup location for: ${startup.name || 'Startup ' + index}`);
+                    // Use Kuala Lumpur as fallback
+                    const backupLat = 3.1390;
+                    const backupLng = 101.6869;
+                    
+                    try {
+                        const marker = L.marker([backupLat, backupLng])
+                            .addTo(map)
+                            .bindPopup(createPopupContent(startup));
+                        
+                        markers.push(marker);
+                        validCoordinates.push([backupLat, backupLng]);
+                        
+                        console.log(`✅ Added backup marker for: ${startup.name || 'Startup ' + index}`);
+                    } catch (error) {
+                        console.error(`❌ Error adding backup marker:`, error);
+                    }
+                }
             });
+
+            // Fit map to show all markers
+            if (validCoordinates.length > 0) {
+                setTimeout(() => {
+                    map.fitBounds(validCoordinates, { padding: [30, 30], maxZoom: 8 });
+                }, 100);
+            } else {
+                // Default view
+                map.setView([3.1390, 101.6869], 6);
+            }
+            
+            console.log(`✅ Total markers added: ${markers.length}`);
         }
 
-        function createPopupContent(startup) {
+        function createPopupContent(startup, index) {
             return `
                 <div class="popup-content">
-                    <img src="${startup.image}" alt="${startup.name}" class="popup-image">
-                    <h3 class="popup-title">${startup.name}</h3>
-                    <p class="popup-country">${startup.country} • ${startup.category}</p>
-                    <p style="font-size: 0.875rem; color: #4a5568; margin-bottom: 1rem;">${startup.description}</p>
-                    <div style="background: rgba(72, 187, 120, 0.1); padding: 0.75rem; border-radius: 0.5rem; margin-top: 1rem;">
-                        <strong style="color: #2f855a; font-size: 0.875rem;">Internship Opportunity:</strong>
-                        <p style="font-size: 0.8125rem; color: #4a5568; margin: 0.25rem 0 0 0;">${startup.internshipInfo}</p>
+                    <h3 class="popup-title">${startup.name || startup['Company Name']}</h3>
+                    <!--<div style="margin: 0.75rem 0;">
+                        <strong style="color: #1f2937;">Address:</strong><br>
+                        <span style="font-size: 0.875rem; color: #4a5568;">${startup.address || startup['Address'] || 'Not provided'}</span>
+                    </div>-->
+                    
+                    <div style="margin: 0.75rem 0;">
+                        <strong style="color: #1f2937;">Role:</strong><br>
+                        <span style="font-size: 0.875rem; color: #4a5568;">${startup.role || startup['Possible internship roles'] || 'Contact for details'}</span>
                     </div>
+                    
+                    <div style="margin: 0.75rem 0;">
+                        <strong style="color: #1f2937;">Email:</strong><br>
+                        <a href="mailto:${startup.email || startup['Email']}" style="font-size: 0.875rem; color: #3b82f6; text-decoration: none;">${startup.email || startup['Email'] || 'Not provided'}</a>
+                    </div>
+                    
+                    <div style="margin: 0.75rem 0;">
+                        <strong style="color: #1f2937;">Website:</strong><br>
+                        <a href="${startup.website || startup['Website']}" target="_blank" style="font-size: 0.875rem; color: #3b82f6; text-decoration: none;">${startup.website || startup['Website'] || 'Not provided'}</a>
+                    </div>
+                    
+                    <div style="margin: 0.75rem 0;">
+                        <strong style="color: #1f2937;">Contact Number:</strong><br>
+                        <a href="tel:${startup.contact || startup['Contact Number']}" style="font-size: 0.875rem; color: #3b82f6; text-decoration: none;">${startup.contact || startup['Contact Number'] || 'Not provided'}</a>
+                    </div>
+                    
+                    <button onclick="showCardInSidebar('${startup['Company Name'] || startup.name}')" 
+                            class="see-more-btn" 
+                            style="margin-top: 1rem;">
+                        See More Details
+                    </button>
                 </div>
             `;
         }
@@ -1000,6 +1286,64 @@
                             easing: 'easeOutQuad'
                         });
                     }, 100);
+                }
+            }
+        }
+
+        // Function to filter companies by company name only
+        function filterCompaniesByName() {
+            const searchInput = document.getElementById('searchInput');
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const searchResultsInfo = document.getElementById('search-results-info');
+            
+            if (!searchTerm) {
+                // Show all companies if search is empty
+                displayAPIDataInSidebar(allStartups);
+                searchResultsInfo.classList.add('hidden');
+                return;
+            }
+
+            // Filter companies by company name only
+            const filteredCompanies = allStartups.filter(company => {
+                const companyName = company['Company Name'] || '';
+                return companyName.toLowerCase().includes(searchTerm);
+            });
+
+            displayAPIDataInSidebar(filteredCompanies);
+
+            if (filteredCompanies.length === 0) {
+                const container = document.getElementById('api-startup-list');
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4">
+                            <svg class="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10l.001-.003M15 10l.001-.003M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <p class="text-gray-600 font-medium">No companies found with that name.</p>
+                        <p class="text-sm text-gray-500 mt-2">Try searching for a full or partial company name.</p>
+                    </div>
+                `;
+                searchResultsInfo.textContent = `No companies found`;
+            } 
+            
+            searchResultsInfo.classList.remove('hidden');
+        }
+
+        // Handle escape key for both search and sidebar
+        function handleEscapeKey(event) {
+            if (event.key === 'Escape') {
+                const searchInput = document.getElementById('searchInput');
+                const sidebar = document.querySelector('.sidebar');
+                
+                // If sidebar is open, close it
+                if (sidebar.classList.contains('show')) {
+                    toggleSidebar();
+                } 
+                // Otherwise clear search
+                else {
+                    searchInput.value = '';
+                    filterCompaniesByName();
                 }
             }
         }
